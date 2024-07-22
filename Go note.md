@@ -6,6 +6,10 @@
 
 ## 概论
 
+硬件制造商正在为处理器添加越来越多的内核以提高性能。所有数据中心都在这些处理器上运行，更重要的是，今天的应用程序使用多个微服务来维护数据库连接，消息队列和维护缓存。因此，开发的软件和编程语言应该可以轻松地支持并发性，并且应该能够随着CPU核心数量的增加而可扩展。
+
+但是，大多数现代编程语言（如Java，Python等）都来自90年代的单线程环境。虽然一些编程语言的框架在不断地提高多核资源使用效率，例如 Java 的 Netty 等，但仍然需要开发人员花费大量的时间和精力搞懂这些框架的运行原理后才能熟练掌握。
+
 Go于2009年发布，当时多核处理器已经上市。Go语言在多核并发上拥有原生的设计优势，Go语言从底层原生支持并发，无须第三方库、开发者的编程技巧和开发经验。很多公司，特别是中国的互联网公司，即将或者已经完成了使用 Go 语言改造旧系统的过程。经过 Go 语言重构的系统能使用更少的硬件资源获得更高的并发和I/O吞吐表现。充分挖掘硬件设备的潜力也满足当前精细化运营的市场大环境。
 
 Go语言的并发是基于 goroutine 的，goroutine 类似于线程，但并非线程。可以将 goroutine 理解为一种虚拟线程。Go 语言运行时会参与调度 goroutine，并将 goroutine 合理地分配到每个 CPU 中，最大限度地使用CPU性能。开启一个goroutine的消耗非常小（大约2KB的内存），你可以轻松创建数百万个goroutine。
@@ -52,25 +56,274 @@ Go语言中函数是一等公民 , 结构体和接口灵活的实现了面向对
 
 
 
+## 总览性论述:
+
+Go 语言不需要用;表示语句结束,回车换行就了 .
+Go 语言没有代码缩进要求 , (python 强制要求四个空格的缩进)
+
+```shell
+#fmt 命令可以帮助调整文件格式
+go fmt main.go
+```
+
+编辑器也可以自动的帮助调用 go fmt
+
+变量声明了没有使用, 也会发生编译错误
+
+函数传参都是值拷贝 , 所以大多情况需要传递指针
+
+Go 语言同 Java 一样也有泛型
+
+Go 语言提供了, channel 通信通道 , 可以保障goroutine协程之间间通信(妙哉妙哉)
+
+Go 语言提供了, 互斥锁和读写锁 , 可以保障goroutine协程运行安全 (数据竟态问题)
+
+Go 语言提供了, 可直接使用的协程安全的 map , 和 Java (HasMap 线程安全版)类似 , 而基本类型（int32、uint32、int64、uint64）,提供了原子操作
+
+go 语言中,map 时一个使用 make 创建的数据结构的引用
+
+![image-20240714上午105151317](Go note.assets/image-20240714上午105151317.png)
+
+### channel
+
+Go 语言中,实现  goroutine 之间的channel 通信,实际上通信内容是存放在共享内存中吗?如果不是的话, 是存放在哪里?
+
+ChatGPT
+
+在 Go 语言中，`channel` 是 goroutine 之间通信的主要工具。实际上，`channel` 的通信内容确实存放在共享内存中。以下是详细解释：
+
+1. `channel` 的数据存储
+
+`channel` 在 Go 中的底层实现使用了共享内存来存储通信内容。具体来说，当你创建一个 `channel` 时，会分配一块内存用于存储该 `channel` 的数据。这块内存区域可以是一个固定大小的缓冲区（对于有缓冲的 `channel`）或仅用于直接传递数据（对于无缓冲的 `channel`）。
+
+#### 有缓冲的 `channel`
+
+对于有缓冲的 `channel`，数据存储在一个环形缓冲区中。每当一个 goroutine 向 `channel` 发送数据时，该数据会被写入缓冲区。如果缓冲区已满，发送 goroutine 会被阻塞，直到有接收 goroutine 从 `channel` 中读取数据并腾出空间。
+
+#### 无缓冲的 `channel`
+
+对于无缓冲的 `channel`，数据不会存储在缓冲区中，而是直接在发送 goroutine 和接收 goroutine 之间传递。如果没有接收 goroutine 等待，发送 goroutine 会被阻塞，直到有接收 goroutine 出现为止。
+
+
+
+操作系统中,进程间通信的方式:
+
+1,pipes 管道
+
+2,共享内存
+
+3,消息队列
+
+4,信号
+
+5,信号量
+
+6,文件
+
+7,socket网络通信
+
+
+
+#### any接口
+
+空接口在类型参数列表中很常见，在Go 1.18引入了一个新的预声明标识符，作为空接口类型的别名。
+
+```go
+// src/builtin/builtin.go
+
+type any = interface{}
+```
+
+由此，我们可以使用如下代码：
+
+```go
+func foo[S ~[]E, E any]() {
+	// ...
+}
+```
+
+##### 结构体字段的可见性
+
+结构体中字段大写开头表示可公开访问，小写表示私有（仅在定义当前结构体的包中可访问）。
+
+
+
+
+
+
+
 ## 基本语法篇:
 
-
+<img src="Go note.assets/image-20240714上午104331653.png" alt="image-20240714上午104331653" style="zoom:50%;" />
 
 ### 变量和常量
 
-Go语言中有丰富的数据类型，除了基本的整型、浮点型、布尔型、字符串外，还有数组、切片、结构体、函数、map、通道（channel）等。Go 语言的基本类型和其他语言大同小异。
+Go语言中有丰富的数据类型，除了基本的整型、浮点型、布尔型、字符串外，还有**数组、切片、结构体、函数、map、通道（channel）**等。Go 语言的基本类型和其他语言大同小异。
 
-GO的数组是基本类型，不是引用类型；
+#### **GO的数组是基本类型，不是引用类型**；
+
+#### 标准声明变量
+
+Go语言的变量声明格式为：
+
+```go
+var 变量名 变量类型
+```
+
+变量声明以关键字`var`开头，变量类型放在变量的后面，行尾无需分号。 举个例子：
+
+```go
+var name string
+var age int
+var isOk bool
+```
 
 #### 变量的初始化
 
-Go语言在声明变量的时候，会自动对变量对应的内存区域进行初始化操作。每个变量会被初始化成其类型的默认值，例如： 整型和浮点型变量的默认值为`0`。 字符串变量的默认值为`空字符串`。 布尔型变量默认为`false`。 切片、函数、指针变量的默认为`nil`。
+**Go语言在声明变量的时候，会自动对变量对应的内存区域进行初始化操作**。每个变量会被初始化成其类型的默认值，例如： 整型和浮点型变量的默认值为`0`。 字符串变量的默认值为`空字符串`。 布尔型变量默认为`false`。 切片、函数、指针变量的默认为`nil`。
 
-当然我们也可在声明变量的时候为其指定初始值。变量初始化的标准格式如下：
+当然我们也可在声明变量的时候为其指定初始值。变量初始化的标准格式如下：：
+
+```go
+var 变量名 类型 = 表达式
+```
+
+举个例子：
+
+```go
+var name string = "Q1mi"
+var age int = 18
+```
+
+或者一次初始化多个变量
+
+```go
+var name, age = "Q1mi", 20
+```
+
+#### 类型推导
+
+有时候我们会将变量的类型省略，这个时候编译器会根据等号右边的值来推导变量的类型完成初始化。
+
+```go
+var name = "Q1mi"
+var age = 18
+```
+
+#### 短变量声明
+
+在函数内部，可以使用更简略的 `:=` 方式声明并初始化变量。
+
+```go
+package main
+
+import (
+	"fmt"
+)
+// 全局变量m
+var m = 100
+
+func main() {
+	n := 10
+	m := 200 // 此处声明局部变量m
+	fmt.Println(m, n)
+}
+```
+
+#### 匿名变量
+
+在使用多重赋值时，如果想要忽略某个值，可以使用`匿名变量（anonymous variable）`。 匿名变量用一个下划线`_`表示，例如：
+
+```go
+func foo() (int, string) {
+	return 10, "Q1mi"
+}
+func main() {
+	x, _ := foo()
+	_, y := foo()
+	fmt.Println("x=", x)
+	fmt.Println("y=", y)
+}
+```
+
+匿名变量不占用命名空间，不会分配内存，所以匿名变量之间不存在重复声明。 (在`Lua`等编程语言里，匿名变量也被叫做哑元变量。)
+
+注意事项：
+
+1. 函数外的每个语句都必须以关键字开始（var、const、func等）
+2. **`:=`不能使用在函数外**。
+3. **`_`多用于占位，表示忽略值**。
+
+
 
 #### 常量
 
 相对于变量，常量是恒定不变的值，多用于定义程序运行期间不会改变的那些值。 常量的声明和变量声明非常类似，只是把`var`换成了`const`，常量在定义的时候必须赋值。
+
+
+
+`iota`是go语言的常量计数器，只能在常量的表达式中使用。
+
+`iota`在const关键字出现时将被重置为0。const中每新增一行常量声明将使`iota`计数一次(iota可理解为const语句块中的行索引)。 使用iota能简化定义，在定义枚举时很有用。
+
+举个例子：
+
+```go
+const (
+		n1 = iota //0
+		n2        //1
+		n3        //2
+		n4        //3
+	)
+```
+
+#### 几个常见的`iota`示例:
+
+使用`_`跳过某些值
+
+```go
+const (
+		n1 = iota //0
+		n2        //1
+		_
+		n4        //3
+	)
+```
+
+`iota`声明中间插队
+
+```go
+const (
+		n1 = iota //0
+		n2 = 100  //100
+		n3 = iota //2
+		n4        //3
+	)
+	const n5 = iota //0
+```
+
+定义数量级 （这里的`<<`表示左移操作，`1<<10`表示将1的二进制表示向左移10位，也就是由`1`变成了`10000000000`，也就是十进制的1024。同理`2<<2`表示将2的二进制表示向左移2位，也就是由`10`变成了`1000`，也就是十进制的8。）
+
+```go
+const (
+		_  = iota
+		KB = 1 << (10 * iota)
+		MB = 1 << (10 * iota)
+		GB = 1 << (10 * iota)
+		TB = 1 << (10 * iota)
+		PB = 1 << (10 * iota)
+	)
+```
+
+多个`iota`定义在一行
+
+```go
+const (
+		a, b = iota + 1, iota + 2 //1,2
+		c, d                      //2,3
+		e, f                      //3,4
+	)
+```
 
 ---
 
@@ -186,6 +439,264 @@ Go语言中可以使用`for range`遍历数组、切片、字符串、map 及通
 1. 数组、切片、字符串返回索引和值。
 2. map返回键和值。
 3. 通道（channel）只返回通道内的值。
+
+Go 语言中的所有循环类型均可以使用`for`关键字来完成。
+
+for循环的基本格式如下：
+
+```bash
+for 初始语句;条件表达式;结束语句{
+    循环体语句
+}
+```
+
+条件表达式返回`true`时循环体不停地进行循环，直到条件表达式返回`false`时自动退出循环。
+
+```go
+func forDemo() {
+	for i := 0; i < 10; i++ {
+		fmt.Println(i)
+	}
+}
+```
+
+for循环的初始语句可以被忽略，但是初始语句后的分号必须要写，例如：
+
+```go
+func forDemo2() {
+	i := 0
+	for ; i < 10; i++ {
+		fmt.Println(i)
+	}
+}
+```
+
+for循环的初始语句和结束语句都可以省略，例如：
+
+```go
+func forDemo3() {
+	i := 0
+	for i < 10 {
+		fmt.Println(i)
+		i++
+	}
+}
+```
+
+这种写法类似于其他编程语言中的`while`，在`while`后添加一个条件表达式，满足条件表达式时持续循环，否则结束循环。
+
+#### 无限循环
+
+```go
+for {
+    循环体语句
+}
+```
+
+for循环可以通过`break`、`goto`、`return`、`panic`语句强制退出循环。
+
+#### for range(键值循环)
+
+Go语言中可以使用`for range`遍历数组、切片、字符串、map 及通道（channel）。 通过`for range`遍历的返回值有以下规律：
+
+1. 数组、切片、字符串返回索引和值。
+2. map返回键和值。
+3. 通道（channel）只返回通道内的值。
+
+Go1.22版本开始支持 for range 整数。👉 [Go 1.22 Release Notes](https://go.dev/doc/go1.22)。
+
+```go
+for i := range 5 {
+	fmt.Println(i)
+}
+
+for range 2 {
+	fmt.Println("《Go语言之路》上市啦！")
+}
+```
+
+输出：
+
+```bash
+0
+1
+2
+3
+4
+《Go语言之路》上市啦！
+《Go语言之路》上市啦！
+```
+
+#### switch case
+
+使用`switch`语句可方便地对大量的值进行条件判断。
+
+```go
+func switchDemo1() {
+	finger := 3
+	switch finger {
+	case 1:
+		fmt.Println("大拇指")
+	case 2:
+		fmt.Println("食指")
+	case 3:
+		fmt.Println("中指")
+	case 4:
+		fmt.Println("无名指")
+	case 5:
+		fmt.Println("小拇指")
+	default:
+		fmt.Println("无效的输入！")
+	}
+}
+```
+
+Go语言规定每个`switch`只能有一个`default`分支。
+
+一个分支可以有多个值，多个case值中间使用英文逗号分隔。
+
+```go
+func testSwitch3() {
+	switch n := 7; n {
+	case 1, 3, 5, 7, 9:
+		fmt.Println("奇数")
+	case 2, 4, 6, 8:
+		fmt.Println("偶数")
+	default:
+		fmt.Println(n)
+	}
+}
+```
+
+分支还可以使用表达式，这时候switch语句后面不需要再跟判断变量。例如：
+
+```go
+func switchDemo4() {
+	age := 30
+	switch {
+	case age < 25:
+		fmt.Println("好好学习吧")
+	case age > 25 && age < 35:
+		fmt.Println("好好工作吧")
+	case age > 60:
+		fmt.Println("好好享受吧")
+	default:
+		fmt.Println("活着真好")
+	}
+}
+```
+
+`fallthrough`语法可以执行满足条件的case的下一个case，是为了兼容C语言中的case设计的。
+
+```go
+func switchDemo5() {
+	s := "a"
+	switch {
+	case s == "a":
+		fmt.Println("a")
+		fallthrough
+	case s == "b":
+		fmt.Println("b")
+	case s == "c":
+		fmt.Println("c")
+	default:
+		fmt.Println("...")
+	}
+}
+```
+
+输出：
+
+```bash
+a
+b
+```
+
+#### goto(跳转到指定标签)
+
+`goto`语句通过标签进行代码间的无条件跳转。`goto`语句可以在快速跳出循环、避免重复退出上有一定的帮助。Go语言中使用`goto`语句能简化一些代码的实现过程。 例如双层嵌套的for循环要退出时：
+
+```go
+func gotoDemo1() {
+	var breakFlag bool
+	for i := 0; i < 10; i++ {
+		for j := 0; j < 10; j++ {
+			if j == 2 {
+				// 设置退出标签
+				breakFlag = true
+				break
+			}
+			fmt.Printf("%v-%v\n", i, j)
+		}
+		// 外层for循环判断
+		if breakFlag {
+			break
+		}
+	}
+}
+```
+
+使用`goto`语句能简化代码：
+
+```go
+func gotoDemo2() {
+	for i := 0; i < 10; i++ {
+		for j := 0; j < 10; j++ {
+			if j == 2 {
+				// 设置退出标签
+				goto breakTag
+			}
+			fmt.Printf("%v-%v\n", i, j)
+		}
+	}
+	return
+	// 标签
+breakTag:
+	fmt.Println("结束for循环")
+}
+```
+
+#### break(跳出循环)
+
+`break`语句可以结束`for`、`switch`和`select`的代码块。
+
+`break`语句还可以在语句后面添加标签，表示退出某个标签对应的代码块，标签要求必须定义在对应的`for`、`switch`和 `select`的代码块上。 举个例子：
+
+```go
+func breakDemo1() {
+BREAKDEMO1:
+	for i := 0; i < 10; i++ {
+		for j := 0; j < 10; j++ {
+			if j == 2 {
+				break BREAKDEMO1
+			}
+			fmt.Printf("%v-%v\n", i, j)
+		}
+	}
+	fmt.Println("...")
+}
+```
+
+#### continue(继续下次循环)
+
+`continue`语句可以结束当前循环，开始下一次的循环迭代过程，仅限在`for`循环内使用。
+
+在 `continue`语句后添加标签时，表示开始标签对应的循环。例如：
+
+```go
+func continueDemo() {
+forloop1:
+	for i := 0; i < 5; i++ {
+		// forloop2:
+		for j := 0; j < 5; j++ {
+			if i == 2 && j == 2 {
+				continue forloop1
+			}
+			fmt.Printf("%v-%v\n", i, j)
+		}
+	}
+}
+```
 
 ---
 
@@ -833,9 +1344,7 @@ func main() {
 
 #### 结构体字段的可见性
 
-结构体中字段大写开头表示可公开访问，小写表示私有（仅在定义当前结构体的包中可访问）。
-
-
+**结构体中字段大写开头表示可公开访问，小写表示私有（仅在定义当前结构体的包中可访问）。**
 
 ---
 
@@ -4533,3 +5042,134 @@ db.Unscoped().Where("age = 20").Find(&users)
 db.Unscoped().Delete(&order)
 //// DELETE FROM orders WHERE id=10;
 ```
+
+
+
+
+
+
+
+
+
+## 项目笔记
+
+
+
+### 创建项目
+
+环境安装搭建
+
+```shell
+➜  ~ go version
+go version go1.18.4 darwin/amd64
+```
+
+初始化项目:
+
+```shell
+mkdir go_hello
+cd go_hello
+#初始化go项目,生成go.mod 文件
+go mod init go_hello
+```
+
+
+
+
+
+```shell
+go get -u github.com/gin-gonic/gin
+```
+
+
+
+创建文件 main.go
+
+```go
+package main
+
+import (
+	"github.com/gin-gonic/gin"
+)
+
+func main() {
+	r := gin.Default()
+	r.GET("/ping", func(c *gin.Context) {
+	 	c.JSON(200, gin.H{
+	 		"message": "pong",
+	 	})
+	 })
+	//router.SetupRouter(r)
+	r.Run(":8060") // 监听并在 0.0.0.0:8060 上启动服务
+}
+```
+
+目录下执行go build 生产可执行文件
+
+```shell
+go build -o testgo
+```
+
+执行可执行文件
+
+```shell
+./testgo
+```
+
+
+
+引入 GORM
+
+```shell
+go get -u gorm.io/gorm
+go get -u gorm.io/driver/sqlite
+```
+
+
+
+
+
+部署项目
+
+```shell
+#必须下载项目对应版本的 go, go 的版本在 go.mod 文件中首行
+#下载时需要注意cpu 是: x86-64 还是 arm64 的,并下载对应的版本
+#uname -m 可以查看 cpu
+wget https://dl.google.com/go/go1.21.12.linux-amd64.tar.gz
+
+#解压
+sudo tar -C /usr/local -xzf go1.21.12.linux-amd64.tar.gz
+
+#配置环境变量
+vim ~/.bashrc
+
+ export GOROOT=/usr/local/go
+ export GOPATH=$HOME/go
+ export GOBIN=$GOPATH/bin
+ export PATH=$PATH:$GOROOT/bin
+ export PATH=$PATH:$GOPATH/bin
+ 
+source ~/.bashrc
+
+#设置镜像源,方便快速安装依赖
+go env -w GOPROXY=https://goproxy.cn
+
+#安装依赖
+go mod tidy
+
+#编译
+go build -o server main.go
+
+#运行
+nohup ./server > /var/www/html/api_cheng_yue_go/runtime.log 2>&1 &
+
+#查看端口占用情况
+lsof -i:8090
+
+#通过日志查看项目启动情况
+vim /var/www/html/api_cheng_yue_go/runtime.log
+```
+
+
+
+### 

@@ -2,13 +2,17 @@ JS
 
 ## JS的特点
 
-–解释型语言
+– 解释型语言 
 
-–类似于 C 和 Java 的语法结构
+   rdg：一般是由浏览器的引擎来解析的
 
-–动态语言
+– 类似于 C 和 Java 的语法结构
 
-–基于原型的面向对象的特点
+   (import 以及声明var  .访问调用等等，语法相似)
+
+– 动态语言
+
+– 基于原型的面向对象的特点
 
 ## 数据类型
 
@@ -504,3 +508,31 @@ const app =  "weight_loss";
   }
 ```
 
+
+
+接受参数判断
+
+```
+if( typeof activityNote != "undefined"){
+  //if param "activityNote":null typeof activityNote = "object"
+  //没有参数 "activityNote" 则 typeof activityNote = "undefined"
+  //参数 "activityNote":"sdsfdsf" 则 typeof activityNote = "string"
+```
+
+
+
+
+
+isNaN() 函数来验证给定的值是否为有效数字
+
+isNaN(number)  判断数字是否为NaN
+
+isNaN('123'); // 返回 false
+
+
+
+
+
+停止代码：
+
+process.exit(1)

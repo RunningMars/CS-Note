@@ -4,9 +4,7 @@
 
 Git的本地结构
 
-<img src="file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpswv3cYp.jpg" alt="img" style="zoom: 10%;" /> 
-
- 
+<img src="Git - RDG.assets/wps1.jpg" alt="img" style="zoom: 25%;" />
 
 ### 添加“新建/修改”
 
@@ -45,8 +43,6 @@ git reset HEAD . 放弃所有的暂存区修改可以使用
 git reset HEAD readme.md 来放弃指定文件的缓存
 ```
 
-
-
 ### 状态查看
 
 ```shell
@@ -55,21 +51,17 @@ git status
 
 查看工作区、暂存区状态
 
- 
-
-<img src="file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wps9cGSZn.jpg" alt="img" style="zoom: 25%;" /> 
+<img src="Git - RDG.assets/wps2.jpg" alt="img" style="zoom: 50%;" /> 
 
 ```shell
 git add new.text
 ```
 
-<img src="file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpsVDJXRY.jpg" alt="img" style="zoom:25%;" /> 
+<img src="Git - RDG.assets/wps3.jpg" alt="img" style="zoom:50%;" /> 
 
  
 
-<img src="file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpsmDcZby.jpg" alt="img" style="zoom:25%;" /> 
-
- 
+<img src="Git - RDG.assets/wps4.jpg" alt="img" style="zoom:50%;" />  
 
 ### 提交
 
@@ -80,6 +72,14 @@ git commit -am"commit message"
 ```
 
 将暂存区的内容提交到本地库
+
+修改提交message
+
+```shell
+git commit --amend
+```
+
+会弹出编辑窗口
 
 ### 撤回提交
 
@@ -149,7 +149,7 @@ git merge --abort
 
 冲突的表现
 
-<img src="file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpsZIl7Jv.jpg" alt="img" style="zoom:15%;" /> 
+<img src="Git - RDG.assets/wps5.jpg" alt="img" style="zoom:50%;" /> 
 
 冲突的解决
 
@@ -183,13 +183,13 @@ git log --oneline
 
 ### 时光穿梭机(前进后退)
 
-<img src="file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpsS3lezL.jpg" alt="img" style="zoom:15%;" /> 
+
+
+<img src="Git - RDG.assets/wps6.jpg" alt="img" style="zoom:50%;" /> 
 
  
 
-![img](file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpsd4PGlf.png)<img src="file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpsdT7Vft.jpg" alt="img" style="zoom:25%;" /> 
-
- 
+![img](Git - RDG.assets/wps7.png)<img src="Git - RDG.assets/wps8.jpg" alt="img" style="zoom:50%;" /> 
 
 基于索引值操作[推荐]
 
@@ -214,11 +214,7 @@ git reset --hard HEAD~n
 
 注：表示后退n 步
 
- 
-
-![img](file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpsQwVyp3.png)![img](file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpsJy1k1Z.png)![img](file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpsFJnH40.png) 
-
-  
+![img](Git - RDG.assets/wps9.png)![img](Git - RDG.assets/wps10.png)![img](Git - RDG.assets/wps11.png) 
 
 reset 命令的三个参数对比 默认—mixed
 
@@ -308,7 +304,9 @@ git commit -am"关联马蜂窝" && git pull && git push
 
 ### Work flow
 
-<img src="file:////private/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.kingsoft.wpsoffice.mac/wps-rdg/ksohtml/wpsmEaefy.jpg" alt="img" style="zoom:15%;" /> 
+<img src="Git - RDG.assets/wps12.jpg" alt="img" style="zoom: 33%;" />
+
+<img src="Git - RDG.assets/22529981-95277b2c18d05043.webp" alt="22529981-95277b2c18d05043" style="zoom:50%;" />
 
  
 

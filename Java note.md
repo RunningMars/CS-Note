@@ -9,24 +9,24 @@
 https://www.oracle.com/java/technologies/javase/jdk13-archive-downloads.html       oricale账号： [rdg_007@163.com](mailto:rdg_007@163.com) RDGrdg007!@#
 
 PO 
-Persistant Object （持久化对象）
+Persistant Object （持久化对象）和持久层(数据库)形成对应的映射关系
 
 BO 
-Business Object （业务对象）
+Business Object （业务对象）,把业务逻辑封装为一个对象
 
-DTO  
-Data transfer Object （数据传输对象）
+DTO 
+Data transfer Object （数据传输对象）用于展示层与服务层之间的数据传输对象
 
 DAO
 Data access Object （数据库访问对象）
 
 VO
-Value Object (值对象)，可以理解为展⽰要⽤的数据，传递到前端页⾯上，直接进⾏展⽰
+Value Object (视图对象)，可以理解为展⽰要⽤的数据，传递到前端页⾯上，直接进⾏展⽰ (比如要避免一些隐私字段的暴露)
 
 ### 程序羊推荐：
 
 java编程思想，疯狂java讲义，java核心技术，重构，mysq必知必会
-Jvm虚拟机,多线程并发，JUC并发工具类
+Jvm虚拟机,多线程并发，JUC并发工具类( import java.util.concurrent.locks.ReentrantLock;  java.util.concurrent 简称 JUC ) (Java 并发工具包（Java Util Concurrent，简称 JUC）是 Java 标准库中一个重要的部分，旨在简化并发编程，并提供了一些强大的并发工具和机制。)
 Java  - Spring Boot
 PHP - Laravel
 Go  - Beego \ Gin
@@ -62,11 +62,11 @@ Java 1995 — (Stanford University Network，斯坦福大学网络公司
 只要在需要运行 java 应用程序的操作系统上，先安装一个Java虚拟机 (JVM Java Virtual Machine) 即可。由JVM来负责Java程序在该系统中的运行
 Java虚拟机机制屏蔽了底层运行平台的差别，实现了“一次编译，到处运行”
 
-**JDK(****Java** **D****evelopment** **K****it Java开发工具包)**
+**JDK** (**J**ava **D**evelopment **K**it  - Java开发工具包)
 JDK是提供给Java开发人员使用的，其中包含了java的开发工具，也包括了JRE。所以安装了JDK，就不用在单独安装JRE了。
 其中的开发工具：编译工具(javac.exe) 打包工具(jar.exe)等
 
-**JRE(****Java** **R****untime** **E****nvironment Java运行环境)**
+**JRE** (**J**ava **R**untime **E**nvironment - Java运行环境)
 包括Java虚拟机(JVM Java Virtual Machine)和Java程序所需的核心类库等，
 如果想要**运行**一个开发好的Java程序，计算机中只需要安装JRE即可。
 
@@ -77,16 +77,34 @@ JRE = JVM + Java SE标准类库
 
 **Write** **once , Run Anywhere**
 
-**1****、****Spring** **框架一般都是基于** **AspectJ** **实现** **AOP** **操作**
+**1**、**Spring** **框架一般都是基于** **AspectJ** **实现** **AOP** **操作**
 
 （1）AspectJ 不是 Spring 组成部分，独立 AOP 框架，一般把 AspectJ 和 Spirng 框架一起使用，进行 AOP 操作
 
-**2****、基于** **AspectJ** **实现** **AOP** **操作**
+**2**、基于 **AspectJ** **实现** **AOP** **操作**
 
 （1）基于 xml 配置文件实现
 （2）基于注解方式实现（使用）
 
 
+
+
+
+Java 语言里负责解释执行字节码文件的是 Java 虚拟机 ，即JVM（Java Virtual Machine）。
+
+JVM是可运行Java字节码文件的虚拟 计算机。所有平台上的JVM向编译器提供相同的编程接口，而编译器只 需要面向虚拟机，生成虚拟机能理解的代码，然后由虚拟机来解释执 行。在一些虚拟机的实现中，还会将虚拟机代码转换成特定系统的机器码执行，从而提高执行效率。
+
+当使用Java编译器编译Java程序时，生成的是与平台无关的字节码，这些字节码不面向任何具体平台，只面向JVM。不同平台上的JVM都是不同的，但它们都提供了相同的接口。JVM是Java程序跨平台的关键部分，只要为不同平台实现了相应的虚拟机，编译后的Java字节码就可以在该平台上运行。显然，相同的字节码程序需要在不同的平台 上运行，这几乎是“不可能的”，只有通过中间的转换器才可以实现，JVM就是这个转换器。
+
+
+
+
+
+
+
+如果Java程序源代码里定义了一个public类，则该源文件的主文件名必须与该public类（也就是该类定义使用了public关键字修饰）的类名相同。
+
+由于Java程序源文件的文件名必须与public类的类名相同，因此，一个Java源文件里最多只能定义一个public类。
 
 ## 基本语法 
 
@@ -100,7 +118,7 @@ JRE = JVM + Java SE标准类库
 @Test 
 public void goAhead()
 
-//shift + control + R   运行Run指定的test方法
+//Shift + Ctrl + R   运行Run指定的test方法
 ```
 
 ### statement
@@ -155,13 +173,27 @@ Java中的名称命名规范：
 
 boolean类型数据只允许取值true和false，无null。
 
+
+
+<img src="Java note.assets/image-20240418下午42103107.png" alt="image-20240418下午42103107" style="zoom:50%;" />
+
+Java语言支持的类型分为两类：基本类型（Primitive Type）和 引用类型（Reference Type）。
+
+基本类型包括boolean类型和数值类型。数值类型有整数类型和浮 点类型。整数类型包括byte、short、int、long、char，浮点类型包括float和double。
+
+Java只包含这8种基本数据类型，值得指出的是，字符串不是基本数据类型，字符串是一个类，也就是一个引用数据类型。
+
+为了简化局部变量的声明，从Java 10开始支持使用var定义局部 变量：var相当于一个动态类型，使用var定义的局部变量的类型由编 译器自动推断—定义变量时分配了什么类型的初始值，那该变量就是什么类型。
+
+
+
+
+
 #### 自动类型转换
 
-容量小的类型自动转换为容量大的数据类型。数据类型按容
+容量小的类型自动转换为容量大的数据类型。数据类型按容量大小排序为：
 
-量大小排序为：
-
-![74A6FD20-1A5D-4A42-8F85-C1D2A0ADA28D](/var/folders/8d/p5f6h_mj58v4yj2p4rp_y2x00000gp/T/com.yinxiang.Mac/com.yinxiang.Mac/WebKitDnD.kNrV95/74A6FD20-1A5D-4A42-8F85-C1D2A0ADA28D.png)
+![image-20240418下午51758007](Java note.assets/image-20240418下午51758007.png)
 
 有多种类型的数据混合运算时，系统首先自动将所有数据转换成容量最大的那种数据类型，然后再进行计算。
 
@@ -692,6 +724,34 @@ public class Outer {
 
 
 
+## 集合
+
+
+
+Java的集合类主要由两个接口派生而出：Collection和Map，Collection和Map是Java集合框架的根接口，这两个接口又包含了一些子接口或实现类。
+
+![image-20240522下午54116414](Java note.assets/image-20240522下午54116414.png)
+
+
+
+
+
+![image-20240522下午54147807](Java note.assets/image-20240522下午54147807.png)
+
+
+
+![image-20240523下午55256231](Java note.assets/image-20240523下午55256231.png)
+
+
+
+## 泛型
+
+![image-20240524下午30641858](Java note.assets/image-20240524下午30641858.png)
+
+需要说明的是，当使用var声明变量时，编译器无法推断泛型的类型。因此，如果使用var声明变量，程序无法使用“菱形”语法。
+
+
+
 ## 框架
 
 Spring 是轻量级的开源的 JavaEE 框架
@@ -759,3 +819,433 @@ IOC 操作 Bean 管理（概念）
 （1）基于 xml 配置文件方式实现
 
 （2）基于注解方式实现
+
+
+
+### Hibernate
+
+Hibernate作为老牌的 ORM映射框架，功能非常强大，涵盖面非常广。但这既是它的优点，同时也成为它的“负担”，是开发人员“不能承受之重”。
+
+Hibernate的设计初衷，是为了最大程度地解放程序员，完全隔离数据库，实现彻底的OR映射。程序员甚至可以不写一行SQL语句，单通过配置就能实现对数据库的操作。
+
+当然，为了实现这个目标，Hibernate也设计地非常复杂、非常精巧。就不可避免的带来以下副作用：
+
+1. 学习成本高
+2. 配置复杂
+3. 调优困难
+
+前两点不难理解，单说“调优困难”。
+
+因为Hibernate的设计目标是彻底的OR映射，彻底的隔离SQL语句。但必然会带来一定的性能损失。大部分情况下，应用如果对性能不敏感，Hibernate也没问题。但应用一旦对性能敏感，有SQL级别调优的需求，Hibernate的优点反而成为缺点。
+
+虽然Hibernate也支持SQL级别的调优，但因为框架设计的过于复杂和精巧，这就需要开发人员对Hibernate理解的非常透彻，这就带来了更高的学习成本。
+
+而现在最流行的MyBatis，作为一个“混合式”，轻量级OR映射框架，既继承了Hibernate的优点，同时也吸取了他的教训。在支持配置的同时，又能接触SQL，从而带来了更多灵活性（包括调试、优化）。
+
+当前，在实际开发中，Hibernate使用得越来越少了。大家更偏爱**MyBatis**这种轻量级框架。所以，对后来学习者，我的建议是：
+
+“*不需要再学习Hibernate了，学MyBatis就够了*。”
+
+
+
+### Servlet（要精通）
+
+当然，现在不会有任何公司，再用纯粹的Servlet来实现整个Web应用，而是转向一些更高级的技术（例如各种 MVC 框架）。因此，会给人一种错觉：Servlet已经过时，后来者就不需要再学习了。
+
+在这里，我可以非常负责任地说：这种观点是极端错误，极端不负责任的。
+
+Servlet不仅要学，而且要学深，学透。
+
+当前，Servlet虽然不再是一个主流web开发技术，但依然是Java Web开发技术的基础，是Java Web容器的基石，是行业标准。而现在流行的各种MVC框架（包括SpringMVC），在最底层，还是以 Servlet为基础的。
+
+为此，我画了一个简单的图（不准确，会意即可）：
+
+![图片](Java note.assets/640.jpeg)图片
+
+所以，如果你想要彻底掌握某个MVC框架，则必须彻底理解Servlet。
+
+而且，Servlet作为一个基础设施。精通它，不仅有助于理解各种MVC框架。即使Servlet本身，也有很多实用价值。
+
+如果你深刻理解了Servlet的生命周期，就可以在底层做很多事情。譬如在Request进来的时候，进行拦截，进行权限的判定。也可以在Response发出的时候，进行拦截，统一检查、统一附加。
+
+所以，如果你正在学习Java，对Servlet，我的建议是：
+
+“*Servlet不仅要学，而且要学深，学透*。”
+
+
+
+## Mybatis
+
+
+
+<img src="Java note.assets/image-20240606下午20958104.png" alt="image-20240606下午20958104" style="zoom:50%;" />
+
+<img src="Java note.assets/image-20240606下午60910075.png" alt="image-20240606下午60910075" style="zoom:50%;" />
+
+
+
+
+
+## Mybatis Plus
+
+
+
+### 主键生成策略
+
+> **源码解释**
+
+```java
+public enum IdType {
+    AUTO, //数据库id自增
+    INPUT, //手动输入
+    ID_WORKER, //默认的全局唯一id
+    UUID, //全局唯一id  uuid
+    NONE;//未设置主键
+    **
+}
+```
+
+
+
+
+
+<img src="Java note.assets/image-20240614下午52732464.png" alt="image-20240614下午52732464" style="zoom: 67%;" />
+
+
+
+```java
+// 假设有一个 QueryWrapper 对象，设置查询条件为 name = 'John Doe'，并将结果转换为 String
+QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+queryWrapper.eq("name", "John Doe");
+String userName = userService.getObj(queryWrapper, obj -> ((User) obj).getName()); // 调用 getObj 方法
+if (userName != null) {
+    System.out.println("User name found: " + userName);
+} else {
+    System.out.println("User name not found.");
+}
+```
+
+当前线程本地储存:
+
+**<img src="Java note.assets/image-20240615下午103328465.png" alt="image-20240615下午103328465" style="zoom:33%;" />**
+
+![image-20240618下午85137249](Java note.assets/image-20240618下午85137249.png)
+
+
+
+消息转换器
+
+
+
+## 项目笔记
+
+
+
+### 创建项目
+
+
+
+详见印象笔记：【SpringBoot新手篇】Spring Boot 简介
+原帖地址：https://blog.csdn.net/qq_45297578/article/details/119249574
+
+1. 处理 idea java版本设置问题，包括 compile 配置的java版本
+
+选择阿里云的镜像中心创建项目,会有更多的国内项目的依赖应用可选, 例如:mybatis-plus
+
+```
+https://start.aliyun.com
+```
+
+
+
+<img src="Java note.assets/image-20240616上午104055506.png" alt="image-20240616上午104055506" style="zoom: 33%;" />
+
+
+
+#### 解决跨域
+
+![image-20240616上午112551184](Java note.assets/image-20240616上午112551184.png)
+
+
+
+#### 热部署
+
+<img src="Java note.assets/image-20240617上午112049896.png" alt="image-20240617上午112049896" style="zoom:50%;" />
+
+<img src="Java note.assets/image-20240617上午112033161.png" alt="image-20240617上午112033161" style="zoom:33%;" />
+
+<img src="Java note.assets/image-20240617上午112428087.png" alt="image-20240617上午112428087" style="zoom:50%;" />
+
+<img src="Java note.assets/image-20240617上午112558832.png" alt="image-20240617上午112558832" style="zoom:50%;" />
+
+#### 自动导入包,去掉不用的包
+
+<img src="Java note.assets/image-20240617下午22505565.png" alt="image-20240617下午22505565" style="zoom:50%;" />
+
+
+
+#### 快速复制工程:
+
+复制文件夹, 重命名文件夹
+
+删除其他所有的文件,包括隐藏文件,只剩下src和 pom
+
+修改更换 pom 中的 artifactId 
+
+idea 直接 open 这个新的文件夹
+
+
+
+#### idea 将下划线转换为驼峰
+
+Shift + F6 弹出下拉选项
+
+
+
+#### 问题处理:
+
+Port 8080 was already in use
+
+Description:
+Web server failed to start. Port 8080 was already in use.
+
+lsof -i:8080
+
+kill  pid
+
+
+
+
+
+#### 修改文件自动重启、编译
+
+mvn idea:module
+
+  解决方法有两种：
+
+    1、手动：修改完代码，按快捷键Ctrl+F9，手动构建项目，或者只修改单个类文件的话，按Ctrl+Shift+F9，重新编译该类文件，即可触发重启服务。
+
+
+
+#### Springboot项目结构
+
+https://blog.csdn.net/weixin_46356448/article/details/136992276
+
+3.1 /src/main/java 目录
+
+|_annotation：放置项目自定义注解
+|_aspect：放置切面代码
+|_config：放置配置类
+|_constant：放置常量、枚举等定义
+   |__consist：存放常量定义
+   |__enums：存放枚举定义
+|_controller：放置控制器代码
+|_filter：放置一些过滤、拦截相关的代码
+|_mapper：放置数据访问层代码接口
+|_model：放置数据模型代码
+   |__entity：放置数据库实体对象定义
+   |__dto：存放数据传输对象定义
+   |__vo：存放显示层对象定义
+|_service：放置具体的业务逻辑代码（接口和实现分离）
+   |__intf：存放业务逻辑接口定义
+   |__impl：存放业务逻辑实际实现
+|_utils：放置工具类和辅助代码
+
+
+
+![img](Java note.assets/v2-20fbe77e01189bf425f5d1ee6002e796_r.jpg)
+
+
+
+
+
+#### 接收 json 格式的请求参数
+
+springboot 使用@RequestParam Integer id 能否接收 json 格式的请求参数?
+
+ChatGPT
+
+在 Spring Boot 中，`@RequestParam` 注解通常用于从查询参数中提取参数，而不是从请求体中提取 JSON 格式的参数。如果你想要从 JSON 格式的请求体中提取参数，通常会使用 `@RequestBody` 注解。
+
+使用 `@RequestBody` 解析 JSON 请求体
+
+如果你的请求是 JSON 格式的，你应该使用 `@RequestBody` 注解来接收 JSON 请求体，并将其映射到一个 Java 对象。例如：
+
+1. **定义一个 DTO 类**：
+
+   ```
+   java
+   复制代码
+   public class UserDTO {
+       private Integer id;
+   
+       // getters and setters
+   }
+   ```
+
+
+
+
+
+### 部署项目到服务器
+
+
+
+#### 安装 OpenJDK 11
+
+这里假设你使用的是一个基于 Ubuntu 的 Linux 服务器。
+
+步骤 1：更新系统软件包
+
+首先，更新你的系统软件包列表以确保你有最新的软件包信息。
+
+```
+sudo apt update
+```
+
+步骤 2：安装 OpenJDK 11
+
+在 Ubuntu 上，你可以使用以下命令来安装 OpenJDK 11：
+
+```
+sudo apt install openjdk-11-jdk
+```
+
+步骤 3：验证安装
+
+安装完成后，你可以通过以下命令来验证 Java 11 是否已正确安装：
+
+```
+java -version
+```
+
+在 CentOS 上安装 OpenJDK 11
+
+```
+sudo yum install java-11-openjdk-devel
+```
+
+
+
+#### 启动 mysql
+
+```mysql
+systemctl start mysqld
+
+
+#安装 mysql
+yum install mysql-server
+# 新安装的 mysql,获取MySQL的初始密码
+# 通过grep命令，在/var/log/mysqld.log文件中，过滤 temporary password关键字，得到初始密码
+grep 'temporary password' /var/log/mysqld.log
+
+#如果账号权限不足, 赋予权限
+GRANT ALL PRIVILEGES ON cheng_yue.* TO 'root'@'localhost' IDENTIFIED BY 'RDGrdg007!@#';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'RDGrdg007!@#';
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY 'RDGrdg007!@#';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY "RDGrdg007!@#";
+GRANT ALL PRIVILEGES ON *.* TO "root"@"%" IDENTIFIED BY "RDGrdg007!@#"; //为root添加远程连接的能力
+
+FLUSH PRIVILEGES;
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password;
+grant all privileges on *.* to 'root'@'%';
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'RDGrdg007!@#';
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'RDGrdg007!@#';
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'RDGrdg007!@#';
+create user 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'RDGrdg007!@#';
+mysql> update user set Grant_priv='y' where user='root' and host='%';
+
+grant all privileges on *.* to 'root'@'%';
+grant all privileges on *.* to 'root'@'localhost';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+
+#设置密码策略级别(0为最低)
+set global validate_password.policy=0;
+
+-GfNDpdCo8KC
+```
+
+#### 配置 nginx
+
+转发前端请求到指定端口
+
+```nginx
+server {
+      listen 80;
+      server_name 8.137.16.60;
+      root /var/www/html/web_cheng_yue/dist;
+      index index.html;
+      location / {
+          try_files $uri $uri/ /index.html;
+      }
+      location /api/ {
+         # 将/api/开头的url转向该域名
+         proxy_pass   http://127.0.0.1:8090;
+         #最终url中去掉/api前缀
+         rewrite "^/api/(.*)$" /$1 break;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # 处理 CORS 请求头
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin' '*';
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, DELETE, PUT';
+            add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type';
+            add_header 'Access-Control-Max-Age' 1728000;
+            add_header 'Content-Type' 'text/plain charset=UTF-8';
+            add_header 'Content-Length' 0;
+            return 204;
+        }
+        add_header 'Access-Control-Allow-Origin' '*';
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS, DELETE, PUT';
+        add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type';
+      }
+}
+```
+
+
+
+#### 启动 jar 包
+
+```shell
+java11启动项目
+nohup /home/jdk-11/bin/java -jar /mnt/env_manager/envmgt-v1.0.1.jar > log.file 2>&1 &
+
+nohup java -jar /var/www/html/api_java/target/api-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod > /var/www/html/api_java/runtime.log 2>&1 &
+
+nohup java -jar /var/www/html/api_java/target/api-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev > /var/www/html/api_java/runtime.log 2>&1 &
+
+nohup java -jar /Users/rdg/www/api/target/api-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev > /Users/rdg/www/api/runtime.log 2>&1 &
+
+
+#查看实时运行日志
+tail -f /var/www/html/api_java/runtime.log
+```
+
+在关闭服务器远程会话服务终端（例如，SSH 连接）时，Spring Boot 应用程序的 JAR 包运行报错 `Shutting down ExecutorService 'applicationTaskExecutor'` 并自动退出，这通常是因为该应用程序被绑定到了该终端上，并在终端关闭时被系统信号中断。
+
+这是一个常见的问题，特别是在没有使用后台运行工具的情况下启动应用程序时。以下是解决这个问题的方法：
+
+#### 使用 `nohup` 命令启动 jar 包
+
+`nohup` 命令可以让你的应用程序在后台运行，即使你关闭终端，它也不会退出。
+
+```shell
+nohup java -jar your-application.jar &
+```
+
+`&` 符号表示在后台运行，`nohup` 表示忽略挂起信号。运行这个命令后，你可以安全地关闭终端，而不影响应用程序的运行。
+
+
+
+
+
+
+
