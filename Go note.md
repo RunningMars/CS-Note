@@ -5079,6 +5079,8 @@ go mod init go_hello
 
 ```shell
 go get -u github.com/gin-gonic/gin
+go get gorm.io/driver/mysql
+go get gorm.io/gorm 
 ```
 
 
@@ -5127,7 +5129,7 @@ go get -u gorm.io/driver/sqlite
 
 
 
-
+nohup ./server > /User/rdg/nnn/Go/api_go/runtime.log 2>&1 &
 
 部署项目
 
