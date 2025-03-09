@@ -441,6 +441,8 @@ type rune = int32
 
 
 
+
+
 #### 修改字符串
 
 要修改字符串，需要先将其转换成`[]rune`或`[]byte`，完成后再转换为`string`。无论哪种转换，都会重新分配内存，并复制字节数组。
@@ -459,6 +461,24 @@ func changeString() {
 	fmt.Println(string(runeS2))
 }
 ```
+
+
+
+#### 类型的声明:
+
+<img src="Go note.assets/image-20240715下午24056011.png" alt="image-20240715下午24056011" style="zoom:50%;" />
+
+<img src="Go note.assets/image-20240715下午24217468.png" alt="image-20240715下午24217468" style="zoom:50%;" />
+
+##### 要比较两个变量 , 需要它俩都是相同的底层类型, 
+
+命名类型 与 非命名类型比较 需要底层是相同的数据类型
+
+命名类型 与 命名类型比较 智能相同的命名类型之间比较, 即使是底层数据类型相同也会编译报错: 类型不匹配 
+
+
+
+
 
 ---
 
@@ -796,6 +816,8 @@ fmt.println(a)
 切片是一个拥有相同类型元素的可变长度的序列。它是基于数组类型做的一层封装。它非常灵活，支持自动扩容。
 切片是一个引用类型，它的内部结构包含`地址`、`长度`和`容量`。切片一般用于快速地操作一块数据集合。
 
+<img src="Go note.assets/image-20250218下午12924005.png" alt="image-20250218下午12924005" style="zoom:50%;" />
+
 #### 切片的赋值拷贝
 
 下面的代码中演示了拷贝前后两个变量共享底层数组，对一个切片的修改会影响另一个切片的内容，这点需要特别注意。
@@ -983,118 +1005,7 @@ func main() {
 }
 ```
 
----
 
-### **指针**
-
-指针本身是一个变量，它也有自己用于存放值的内存地址，而它的值为指向目标的内存地址值
-
-区别于C/C++中的指针，Go语言中的指针不能进行偏移和运算，是安全指针。
-要搞明白Go语言中的指针需要先知道3个概念：指针地址、指针类型和指针取值。
-
-<img src="assets/image-20220805102935062.png" alt="image-20220805102935062" style="zoom:33%;" />
-
-```go
-func main() {
-   var a int
-   a = 100
-   b := &a
-   fmt.Printf("type a:%T type b:%T\n", a, b)
-   // 将a的十六进制内存地址打印出来
-   fmt.Printf("%p\n", &a)
-   fmt.Printf("%p\n", b) // b的值
-   fmt.Printf("%v\n", b)
-   fmt.Printf("%p\n", &b) // b的内存地址
-}
-```
-
-#### go语言中函数传参数永远传的是拷贝
-
-```go
-//go语言中函数传参数永远传的是拷贝
-func f(x person) {
-	x.gender = "女" // 修改的是副本的gender
-}
-func f2(x *person) {
-	// (*x).gender = "女" // 根据内存地址找到那个原变量,修改的就是原来的变量
-	x.gender = "女" // 语法糖,自动根据指针找对应的变量
-}
-func main() {
-	var p person
-	p.name = "周林"
-	p.gender = "男"
-	f(p)
-	fmt.Println(p.gender) // 男
-	f2(&p)                // ox1241ac3
-	fmt.Println(p.gender) // 女
-}
-```
-
-
-
-#### new
-
-new是一个内置的函数，它的函数签名如下：
-
-```go
-func new(Type) *Type
-```
-
-其中，
-
-- Type表示类型，new函数只接受一个参数，这个参数是一个类型
-- *Type表示类型指针，new函数返回一个指向该类型内存地址的指针。
-
-new函数不太常用，使用new函数得到的是一个类型的指针，并且该指针对应的值为该类型的零值。举个例子：
-
-```go
-func main() {
-	a := new(int)
-	b := new(bool)
-	fmt.Printf("%T\n", a) // *int
-	fmt.Printf("%T\n", b) // *bool
-	fmt.Println(*a)       // 0
-	fmt.Println(*b)       // false
-}	
-```
-
-本节开始的示例代码中`var a *int`只是声明了一个指针变量a但是没有初始化，指针作为引用类型需要初始化后才会拥有内存空间，才可以给它赋值。应该按照如下方式使用内置的new函数对a进行初始化之后就可以正常对其赋值了：
-
-```go
-func main() {
-	var a *int
-	a = new(int)
-	*a = 10
-	fmt.Println(*a)
-}
-```
-
-#### make
-
-make也是用于内存分配的，区别于new，它只用于slice、map以及channel的内存创建，而且它返回的类型就是这三个类型本身，而不是他们的指针类型，因为这三种类型就是引用类型，所以就没有必要返回他们的指针了。make函数的函数签名如下：
-
-```go
-func make(t Type, size ...IntegerType) Type
-```
-
-make函数是无可替代的，我们在使用slice、map以及channel的时候，都需要使用make进行初始化，然后才可以对它们进行操作。这个我们在上一章中都有说明，关于channel我们会在后续的章节详细说明。
-
-本节开始的示例中`var b map[string]int`只是声明变量b是一个map类型的变量，需要像下面的示例代码一样使用make函数进行初始化操作之后，才能对其进行键值对赋值：
-
-```go
-func main() {
-	var b map[string]int
-	b = make(map[string]int, 10)
-	b["沙河娜扎"] = 100
-	fmt.Println(b)
-}
-```
-
-#### new与make的区别
-
-1. 二者都是用来做内存分配的。
-2. make只用于slice、map以及channel的初始化，返回的还是这三个引用类型本身；
-3. 而new用于类型的内存分配，并且内存对应的值为类型零值，返回的是指向类型的指针。
 
 ---
 
@@ -1412,6 +1323,119 @@ func main() {
 
 ---
 
+### **指针**
+
+指针本身是一个变量，它也有自己用于存放值的内存地址，而它的值为指向目标的内存地址值
+
+区别于C/C++中的指针，Go语言中的指针不能进行偏移和运算，是安全指针。
+要搞明白Go语言中的指针需要先知道3个概念：指针地址、指针类型和指针取值。
+
+<img src="assets/image-20220805102935062.png" alt="image-20220805102935062" style="zoom:33%;" />
+
+```go
+func main() {
+   var a int
+   a = 100
+   b := &a
+   fmt.Printf("type a:%T type b:%T\n", a, b)
+   // 将a的十六进制内存地址打印出来
+   fmt.Printf("%p\n", &a)
+   fmt.Printf("%p\n", b) // b的值
+   fmt.Printf("%v\n", b)
+   fmt.Printf("%p\n", &b) // b的内存地址
+}
+```
+
+#### go语言中函数传参数永远传的是拷贝
+
+```go
+//go语言中函数传参数永远传的是拷贝
+func f(x person) {
+	x.gender = "女" // 修改的是副本的gender
+}
+func f2(x *person) {
+	// (*x).gender = "女" // 根据内存地址找到那个原变量,修改的就是原来的变量
+	x.gender = "女" // 语法糖,自动根据指针找对应的变量
+}
+func main() {
+	var p person
+	p.name = "周林"
+	p.gender = "男"
+	f(p)
+	fmt.Println(p.gender) // 男
+	f2(&p)                // ox1241ac3
+	fmt.Println(p.gender) // 女
+}
+```
+
+
+
+#### new
+
+new是一个内置的函数，它的函数签名如下：
+
+```go
+func new(Type) *Type
+```
+
+其中，
+
+- Type表示类型，new函数只接受一个参数，这个参数是一个类型
+- *Type表示类型指针，new函数返回一个指向该类型内存地址的指针。
+
+new函数不太常用，使用new函数得到的是一个类型的指针，并且该指针对应的值为该类型的零值。举个例子：
+
+```go
+func main() {
+	a := new(int)
+	b := new(bool)
+	fmt.Printf("%T\n", a) // *int
+	fmt.Printf("%T\n", b) // *bool
+	fmt.Println(*a)       // 0
+	fmt.Println(*b)       // false
+}	
+```
+
+本节开始的示例代码中`var a *int`只是声明了一个指针变量a但是没有初始化，指针作为引用类型需要初始化后才会拥有内存空间，才可以给它赋值。应该按照如下方式使用内置的new函数对a进行初始化之后就可以正常对其赋值了：
+
+```go
+func main() {
+	var a *int
+	a = new(int)
+	*a = 10
+	fmt.Println(*a)
+}
+```
+
+#### make
+
+make也是用于内存分配的，区别于new，它只用于slice、map以及channel的内存创建，而且它返回的类型就是这三个类型本身，而不是他们的指针类型，因为这三种类型就是引用类型，所以就没有必要返回他们的指针了。make函数的函数签名如下：
+
+```go
+func make(t Type, size ...IntegerType) Type
+```
+
+make函数是无可替代的，我们在使用slice、map以及channel的时候，都需要使用make进行初始化，然后才可以对它们进行操作。这个我们在上一章中都有说明，关于channel我们会在后续的章节详细说明。
+
+本节开始的示例中`var b map[string]int`只是声明变量b是一个map类型的变量，需要像下面的示例代码一样使用make函数进行初始化操作之后，才能对其进行键值对赋值：
+
+```go
+func main() {
+	var b map[string]int
+	b = make(map[string]int, 10)
+	b["沙河娜扎"] = 100
+	fmt.Println(b)
+}
+```
+
+#### new与make的区别
+
+1. 二者都是用来做内存分配的。
+2. make只用于slice切片、map以及channel的初始化，返回的还是这三个引用类型本身；
+3. 而new用于类型的内存分配，并且内存对应的值为类型零值，返回的是指向类型的指针。
+
+---
+
 ### 接口
 
 接口（interface）定义了一个对象的行为规范，只定义规范不实现，由具体的对象来实现规范的细节。
@@ -1462,8 +1486,6 @@ PHP、Java等语言中也有接口的概念，不过在PHP和Java语言中需要
 
 ​       由于接口类型的值可以是任意一个实现了该接口的类型值，所以接口值除了需要记录具体**值**之外，还需要记录这个值属于的**类型**。也就是说接口值由“类型”和“值”组成，鉴于这两部分会根据存入值的不同而发生变化，我们称之为接口的`动态类型`和`动态值`。
 
-![接口值示例](assets/interface01.png)
-
 ```go
 
 // 定义接口
@@ -1488,8 +1510,6 @@ func main(){
 #### 接口值
 
 由于接口类型的值可以是任意一个实现了该接口的类型值，所以接口值除了需要记录具体**值**之外，还需要记录这个值属于的**类型**。也就是说接口值由“类型”和“值”组成，鉴于这两部分会根据存入值的不同而发生变化，我们称之为接口的`动态类型`和`动态值`。
-
-![接口值示例](assets/interface01-0388236.png)
 
 我们接下来通过一个示例来加深对接口值的理解。
 
@@ -1525,8 +1545,6 @@ var m Mover
 
 此时，接口变量`m`是接口类型的零值，也就是它的类型和值部分都是`nil`，就如下图所示。
 
-![接口值示例](assets/interface02.png)
-
 我们可以使用`m == nil`来判断此时的接口值是否为空。
 
 ```go
@@ -1547,8 +1565,6 @@ m = &Dog{Name: "旺财"}
 
 此时，接口值`m`的动态类型会被设置为`*Dog`，动态值为结构体变量的拷贝。
 
-![接口值示例](assets/interface03.png)
-
 然后，我们给接口变量`m`赋值为一个`*Car`类型的值。
 
 ```go
@@ -1557,8 +1573,6 @@ m = c
 ```
 
 这一次，接口值`m`的动态类型为`*Car`，动态值为`nil`。
-
-![接口值示例](assets/interface04.png)
 
 **注意：**此时接口变量`m`与`nil`并不相等，因为它只是动态值的部分为`nil`，而动态类型部分保存着对应值的类型。
 
@@ -1668,149 +1682,11 @@ var _ IRouter = &RouterGroup{}  // 确保RouterGroup实现了接口IRouter
 
 ---
 
-### 包（package）
-
-#### 标识符可见性
-
-在同一个包内部声明的标识符都位于同一个命名空间下，在不同的包内部声明的标识符就属于不同的命名空间。想要在包的外部使用包内部的标识符就需要添加包名前缀，例如`fmt.Println("Hello world!")`，就是指调用`fmt`包中的`Println`函数。
-
-如果想让一个包中的标识符（如变量、常量、类型、函数等）能被外部的包使用，那么标识符必须是对外可见的（public）。在Go语言中是通过标识符的首字母大/小写来控制标识符的对外可见（public）/不可见（private）的。在一个包内部只有首字母大写的标识符才是对外可见的。
-
-#### init初始化函数
-
-在每一个Go源文件中，都可以定义任意个如下格式的特殊函数：
-
-```go
-func init(){
-  // ...
-}
-```
-
-这种特殊的函数不接收任何参数也没有任何返回值，我们也不能在代码中主动调用它。当程序启动的时候，init函数会按照它们声明的顺序自动执行。
-
-一个包的初始化过程是按照代码中引入的顺序来进行的，所有在该包中声明的`init`函数都将被串行调用并且仅调用执行一次。每一个包初始化的时候都是先执行依赖的包中声明的`init`函数再执行当前包中声明的`init`函数。确保在程序的`main`函数开始执行时所有的依赖包都已初始化完成。![包初始化函数执行顺序示意图](assets/package01.png)
-
-每一个包的初始化是先从初始化包级别变量开始的。例如从下面的示例中我们就可以看出包级别变量的初始化会先于`init`初始化函数。
-
-#### go module
-
-在Go语言的早期版本中，我们编写Go项目代码时所依赖的所有第三方包都需要保存在GOPATH这个目录下面。这样的依赖管理方式存在一个致命的缺陷，那就是不支持版本管理，同一个依赖包只能存在一个版本的代码。可是我们本地的多个项目完全可能分别依赖同一个第三方包的不同版本。
-
-**go module介绍**
-
-Go module 是 Go1.11 版本发布的依赖管理方案，从 Go1.14 版本开始推荐在生产环境使用，于Go1.16版本默认开启。
-
-#### 使用go module引入包
-
-接下来我们将通过一个示例来演示如何在开发项目时使用 go module 拉取和管理项目依赖。
-
-**初始化项目** 我们在本地新建一个名为`holiday`项目，按如下方式创建一个名为`holiday`的文件夹并切换到该目录下：
-
-```bash
-$ mkdir holiday
-$ cd holiday
-```
-
-目前我们位于`holiday`文件夹下，接下来执行下面的命令初始化项目。
-
-```bash
-$ go mod init holiday
-go: creating new go.mod: module holiday
-```
-
-该命令会自动在项目目录下创建一个`go.mod`文件，其内容如下。
-
-```go
-module holiday
-
-go 1.16
-```
-
-其中：
-
-- module holiday：定义当前项目的导入路径
-- go 1.16：标识当前项目使用的 Go 版本
-
-`go.mod`文件会记录项目使用的第三方依赖包信息，包括包名和版本，由于我们的`holiday`项目目前还没有使用到第三方依赖包，所以`go.mod`文件暂时还没有记录任何依赖包信息，只有当前项目的一些信息。
-
-接下来，我们在项目目录下新建一个`main.go`文件，其内容如下：
-
-```go
-// holiday/main.go
-
-package main
-
-import "fmt"
-
-func main() {
-	fmt.Println("现在是假期时间...")
-}
-```
-
-然后，我们的`holiday`项目现在需要引入一个第三方包`github.com/q1mi/hello`来实现一些必要的功能。类似这样的场景在我们的日常开发中是很常见的。我们需要先将依赖包下载到本地同时在`go.mod`中记录依赖信息，然后才能在我们的代码中引入并使用这个包。下载依赖包主要有两种方法。
-
-第一种方法是在项目目录下执行`go get`命令手动下载依赖的包：
-
-```bash
-holiday $ go get -u github.com/q1mi/hello
-go get: added github.com/q1mi/hello v0.1.1
-```
-
-这样默认会下载最新的发布版本，你也可以指定想要下载指定的版本号的。
-
-```bash
-holiday $ go get -u github.com/q1mi/hello@v0.1.0
-go: downloading github.com/q1mi/hello v0.1.0
-go get: downgraded github.com/q1mi/hello v0.1.1 => v0.1.0
-```
-
-如果依赖包没有发布任何版本则会拉取最新的提交，最终`go.mod`中的依赖信息会变成类似下面这种由默认v0.0.0的版本号和最新一次commit的时间和hash组成的版本格式：
-
-```go
-require github.com/q1mi/hello v0.0.0-20210218074646-139b0bcd549d
-```
-
-如果想指定下载某个commit对应的代码，可以直接指定commit hash，不过没有必要写出完整的commit hash，一般前7位即可。例如：
-
-```bash
-holiday $ go get github.com/q1mi/hello@2ccfadd
-go: downloading github.com/q1mi/hello v0.1.2-0.20210219092711-2ccfaddad6a3
-go get: added github.com/q1mi/hello v0.1.2-0.20210219092711-2ccfaddad6a3
-```
-
-此时，我们打开`go.mod`文件就可以看到下载的依赖包及版本信息都已经被记录下来了。
-
-```go
-module holiday
-
-go 1.16
-
-require github.com/q1mi/hello v0.1.0 // indirect
-```
-
-行尾的`indirect`表示该依赖包为间接依赖，说明在当前程序中的所有 import 语句中没有发现引入这个包。
-
-另外在执行`go get`命令下载一个新的依赖包时一般会额外添加`-u`参数，强制更新现有依赖。
-
-第二种方式是我们直接编辑`go.mod`文件，将依赖包和版本信息写入该文件。例如我们修改`holiday/go.mod`文件内容如下：
-
-```go
-module holiday
-
-go 1.16
-
-require github.com/q1mi/hello latest
-```
-
-表示当前项目需要使用`github.com/q1mi/hello`库的最新版本，然后在项目目录下执行`go mod download`下载依赖包。
-
----
-
-### error接口
+#### error接口
 
 Go 语言中把错误当成一种特殊的值来处理，不支持其他语言中使用`try/catch`捕获异常的方式。
 
-#### error 接口
+##### error 接口
 
 Go 语言中使用一个名为 `error` 接口来表示错误类型。
 
@@ -1840,11 +1716,11 @@ if err != nil {
 }
 ```
 
-**注意**
+##### **注意**
 
 当我们使用`fmt`包打印错误时会自动调用 error 类型的 Error 方法，也就是会打印出错误的描述信息。
 
-#### 创建错误
+##### 创建错误
 
 我们可以根据需求自定义 error，最简单的方式是使用`errors` 包提供的`New`函数创建一个错误。
 
@@ -1874,7 +1750,7 @@ func queryById(id int64) (*Info, error) {
 var EOF = errors.New("EOF")
 ```
 
-#### fmt.Errorf
+##### fmt.Errorf
 
 当我们需要传入格式化的错误描述信息时，使用`fmt.Errorf`是个更好的选择。
 
@@ -1898,7 +1774,7 @@ func Is(err, target error) bool              // 判断err是否包含target
 func As(err error, target interface{}) bool  // 判断err是否为target类型
 ```
 
-#### 错误结构体类型
+##### 错误结构体类型
 
 此外我们还可以自己定义结构体类型，实现``error`接口。
 
@@ -1916,366 +1792,7 @@ func (e *OpError) Error() string {
 
 ---
 
-### 反射
-
-#### 变量的内在机制
-
-Go语言中的变量是分为两部分的:
-
-- 类型信息：预先定义好的元信息。
-
-- 值信息：程序运行过程中可动态变化的。
-
-#### 反射介绍
-
-反射是指在程序运行期间对程序本身进行访问和修改的能力。程序在编译时，变量被转换为内存地址，变量名不会被编译器写入到可执行部分。在运行程序时，程序无法获取自身的信息。
-
-支持反射的语言可以在程序编译期间将变量的反射信息，如字段名称、类型信息、结构体信息等整合到可执行文件中，并给程序提供接口访问反射信息，这样就可以在程序运行期间获取类型的反射信息，并且有能力修改它们。
-
-Go程序在运行期间使用reflect包访问程序的反射信息。
-
-在上一篇博客中我们介绍了空接口。 空接口可以存储任意类型的变量，那我们如何知道这个空接口保存的数据是什么呢？ 反射就是在运行时动态的获取一个变量的类型信息和值信息。
-
-#### reflect包
-
-在Go语言的反射机制中，任何接口值都由是一个具体类型和具体类型的值两部分组成的(我们在上一篇接口的博客中有介绍相关概念)。 在Go语言中反射的相关功能由内置的reflect包提供，任意接口值在反射中都可以理解为由reflect.Type和reflect.Value两部分组成，并且reflect包提供了reflect.TypeOf和reflect.ValueOf两个函数来获取任意对象的Value和Type。
-
-#### TypeOf
-
-在Go语言中，使用`reflect.TypeOf()`函数可以获得任意值的类型对象（reflect.Type），程序通过类型对象可以访问任意值的类型信息。
-
-```go
-package main
-
-import (
-	"fmt"
-	"reflect"
-)
-
-func reflectType(x interface{}) {
-	v := reflect.TypeOf(x)
-	fmt.Printf("type:%v\n", v)
-}
-func main() {
-	var a float32 = 3.14
-	reflectType(a) // type:float32
-	var b int64 = 100
-	reflectType(b) // type:int64
-}
-```
-
-##### type name和type kind
-
-在反射中关于类型还划分为两种：`类型（Type）`和`种类（Kind）`。因为在Go语言中我们可以使用type关键字构造很多自定义类型，而`种类（Kind）`就是指底层的类型，但在反射中，当需要区分指针、结构体等大品种的类型时，就会用到`种类（Kind）`。 举个例子，我们定义了两个指针类型和两个结构体类型，通过反射查看它们的类型和种类。
-
-```go
-package main
-
-import (
-	"fmt"
-	"reflect"
-)
-
-type myInt int64
-
-func reflectType(x interface{}) {
-	t := reflect.TypeOf(x)
-	fmt.Printf("type:%v kind:%v\n", t.Name(), t.Kind())
-}
-
-func main() {
-	var a *float32 // 指针
-	var b myInt    // 自定义类型
-	var c rune     // 类型别名
-	reflectType(a) // type: kind:ptr
-	reflectType(b) // type:myInt kind:int64
-	reflectType(c) // type:int32 kind:int32
-
-	type person struct {
-		name string
-		age  int
-	}
-	type book struct{ title string }
-	var d = person{
-		name: "沙河小王子",
-		age:  18,
-	}
-	var e = book{title: "《跟小王子学Go语言》"}
-	reflectType(d) // type:person kind:struct
-	reflectType(e) // type:book kind:struct
-}
-```
-
-Go语言的反射中像数组、切片、Map、指针等类型的变量，它们的`.Name()`都是返回`空`。
-
-在`reflect`包中定义的Kind类型如下：
-
-```go
-type Kind uint
-const (
-    Invalid Kind = iota  // 非法类型
-    Bool                 // 布尔型
-    Int                  // 有符号整型
-    Int8                 // 有符号8位整型
-    Int16                // 有符号16位整型
-    Int32                // 有符号32位整型
-    Int64                // 有符号64位整型
-    Uint                 // 无符号整型
-    Uint8                // 无符号8位整型
-    Uint16               // 无符号16位整型
-    Uint32               // 无符号32位整型
-    Uint64               // 无符号64位整型
-    Uintptr              // 指针
-    Float32              // 单精度浮点数
-    Float64              // 双精度浮点数
-    Complex64            // 64位复数类型
-    Complex128           // 128位复数类型
-    Array                // 数组
-    Chan                 // 通道
-    Func                 // 函数
-    Interface            // 接口
-    Map                  // 映射
-    Ptr                  // 指针
-    Slice                // 切片
-    String               // 字符串
-    Struct               // 结构体
-    UnsafePointer        // 底层指针
-)
-```
-
-#### ValueOf
-
-`reflect.ValueOf()`返回的是`reflect.Value`类型，其中包含了原始值的值信息。`reflect.Value`与原始值之间可以互相转换。
-
-`reflect.Value`类型提供的获取原始值的方法如下：
-
-|           方法           |                             说明                             |
-| :----------------------: | :----------------------------------------------------------: |
-| Interface() interface {} | 将值以 interface{} 类型返回，可以通过类型断言转换为指定类型  |
-|       Int() int64        |     将值以 int 类型返回，所有有符号整型均可以此方式返回      |
-|      Uint() uint64       |     将值以 uint 类型返回，所有无符号整型均可以此方式返回     |
-|     Float() float64      | 将值以双精度（float64）类型返回，所有浮点数（float32、float64）均可以此方式返回 |
-|       Bool() bool        |                     将值以 bool 类型返回                     |
-|     Bytes() []bytes      |               将值以字节数组 []bytes 类型返回                |
-|     String() string      |                     将值以字符串类型返回                     |
-
-#### 通过反射获取值
-
-```go
-func reflectValue(x interface{}) {
-	v := reflect.ValueOf(x)
-	k := v.Kind()
-	switch k {
-	case reflect.Int64:
-		// v.Int()从反射中获取整型的原始值，然后通过int64()强制类型转换
-		fmt.Printf("type is int64, value is %d\n", int64(v.Int()))
-	case reflect.Float32:
-		// v.Float()从反射中获取浮点型的原始值，然后通过float32()强制类型转换
-		fmt.Printf("type is float32, value is %f\n", float32(v.Float()))
-	case reflect.Float64:
-		// v.Float()从反射中获取浮点型的原始值，然后通过float64()强制类型转换
-		fmt.Printf("type is float64, value is %f\n", float64(v.Float()))
-	}
-}
-func main() {
-	var a float32 = 3.14
-	var b int64 = 100
-	reflectValue(a) // type is float32, value is 3.140000
-	reflectValue(b) // type is int64, value is 100
-	// 将int类型的原始值转换为reflect.Value类型
-	c := reflect.ValueOf(10)
-	fmt.Printf("type c :%T\n", c) // type c :reflect.Value
-}
-```
-
-#### 通过反射设置变量的值
-
-想要在函数中通过反射修改变量的值，需要注意函数参数传递的是值拷贝，必须传递变量地址才能修改变量值。而反射中使用专有的`Elem()`方法来获取指针对应的值。
-
-```go
-package main
-
-import (
-	"fmt"
-	"reflect"
-)
-
-func reflectSetValue1(x interface{}) {
-	v := reflect.ValueOf(x)
-	if v.Kind() == reflect.Int64 {
-		v.SetInt(200) //修改的是副本，reflect包会引发panic
-	}
-}
-func reflectSetValue2(x interface{}) {
-	v := reflect.ValueOf(x)
-	// 反射中使用 Elem()方法获取指针对应的值
-	if v.Elem().Kind() == reflect.Int64 {
-		v.Elem().SetInt(200)
-	}
-}
-func main() {
-	var a int64 = 100
-	// reflectSetValue1(a) //panic: reflect: reflect.Value.SetInt using unaddressable value
-	reflectSetValue2(&a)
-	fmt.Println(a)
-}
-```
-
-#### isNil()和isValid()
-
-##### isNil()
-
-```go
-func (v Value) IsNil() bool
-```
-
-`IsNil()`报告v持有的值是否为nil。v持有的值的分类必须是通道、函数、接口、映射、指针、切片之一；否则IsNil函数会导致panic。
-
-##### isValid()
-
-```go
-func (v Value) IsValid() bool
-```
-
-`IsValid()`返回v是否持有一个值。如果v是Value零值会返回假，此时v除了IsValid、String、Kind之外的方法都会导致panic。
-
-**举个例子**
-
-`IsNil()`常被用于判断指针是否为空；`IsValid()`常被用于判定返回值是否有效。
-
-```go
-func main() {
-	// *int类型空指针
-	var a *int
-	fmt.Println("var a *int IsNil:", reflect.ValueOf(a).IsNil())
-	// nil值
-	fmt.Println("nil IsValid:", reflect.ValueOf(nil).IsValid())
-	// 实例化一个匿名结构体
-	b := struct{}{}
-	// 尝试从结构体中查找"abc"字段
-	fmt.Println("不存在的结构体成员:", reflect.ValueOf(b).FieldByName("abc").IsValid())
-	// 尝试从结构体中查找"abc"方法
-	fmt.Println("不存在的结构体方法:", reflect.ValueOf(b).MethodByName("abc").IsValid())
-	// map
-	c := map[string]int{}
-	// 尝试从map中查找一个不存在的键
-	fmt.Println("map中不存在的键：", reflect.ValueOf(c).MapIndex(reflect.ValueOf("娜扎")).IsValid())
-}
-```
-
-#### 结构体反射
-
-##### 与结构体相关的方法
-
-任意值通过`reflect.TypeOf()`获得反射对象信息后，如果它的类型是结构体，可以通过反射值对象（`reflect.Type`）的`NumField()`和`Field()`方法获得结构体成员的详细信息。
-
-`reflect.Type`中与获取结构体成员相关的的方法如下表所示。
-
-|                            方法                             |                             说明                             |
-| :---------------------------------------------------------: | :----------------------------------------------------------: |
-|                  Field(i int) StructField                   |          根据索引，返回索引对应的结构体字段的信息。          |
-|                       NumField() int                        |                   返回结构体成员字段数量。                   |
-|        FieldByName(name string) (StructField, bool)         |       根据给定字符串返回字符串对应的结构体字段的信息。       |
-|            FieldByIndex(index []int) StructField            | 多层成员访问时，根据 []int 提供的每个结构体的字段索引，返回字段的信息。 |
-| FieldByNameFunc(match func(string) bool) (StructField,bool) |              根据传入的匹配函数匹配需要的字段。              |
-|                       NumMethod() int                       |                返回该类型的方法集中方法的数目                |
-|                     Method(int) Method                      |                返回该类型方法集中的第i个方法                 |
-|             MethodByName(string)(Method, bool)              |              根据方法名返回该类型方法集中的方法              |
-
-##### StructField类型
-
-`StructField`类型用来描述结构体中的一个字段的信息。
-
-`StructField`的定义如下：
-
-```go
-type StructField struct {
-    // Name是字段的名字。PkgPath是非导出字段的包路径，对导出字段该字段为""。
-    // 参见http://golang.org/ref/spec#Uniqueness_of_identifiers
-    Name    string
-    PkgPath string
-    Type      Type      // 字段的类型
-    Tag       StructTag // 字段的标签
-    Offset    uintptr   // 字段在结构体中的字节偏移量
-    Index     []int     // 用于Type.FieldByIndex时的索引切片
-    Anonymous bool      // 是否匿名字段
-}
-```
-
-##### 结构体反射示例
-
-当我们使用反射得到一个结构体数据之后可以通过索引依次获取其字段信息，也可以通过字段名去获取指定的字段信息。
-
-```go
-type student struct {
-	Name  string `json:"name"`
-	Score int    `json:"score"`
-}
-
-func main() {
-	stu1 := student{
-		Name:  "小王子",
-		Score: 90,
-	}
-
-	t := reflect.TypeOf(stu1)
-	fmt.Println(t.Name(), t.Kind()) // student struct
-	// 通过for循环遍历结构体的所有字段信息
-	for i := 0; i < t.NumField(); i++ {
-		field := t.Field(i)
-		fmt.Printf("name:%s index:%d type:%v json tag:%v\n", field.Name, field.Index, field.Type, field.Tag.Get("json"))
-	}
-
-	// 通过字段名获取指定结构体字段信息
-	if scoreField, ok := t.FieldByName("Score"); ok {
-		fmt.Printf("name:%s index:%d type:%v json tag:%v\n", scoreField.Name, scoreField.Index, scoreField.Type, scoreField.Tag.Get("json"))
-	}
-}
-```
-
-接下来编写一个函数`printMethod(s interface{})`来遍历打印s包含的方法。
-
-```go
-// 给student添加两个方法 Study和Sleep(注意首字母大写)
-func (s student) Study() string {
-	msg := "好好学习，天天向上。"
-	fmt.Println(msg)
-	return msg
-}
-
-func (s student) Sleep() string {
-	msg := "好好睡觉，快快长大。"
-	fmt.Println(msg)
-	return msg
-}
-
-func printMethod(x interface{}) {
-	t := reflect.TypeOf(x)
-	v := reflect.ValueOf(x)
-
-	fmt.Println(t.NumMethod())
-	for i := 0; i < v.NumMethod(); i++ {
-		methodType := v.Method(i).Type()
-		fmt.Printf("method name:%s\n", t.Method(i).Name)
-		fmt.Printf("method:%s\n", methodType)
-		// 通过反射调用方法传递的参数必须是 []reflect.Value 类型
-		var args = []reflect.Value{}
-		v.Method(i).Call(args)
-	}
-}
-```
-
-#### 反射是把双刃剑
-
-反射是一个强大并富有表现力的工具，能让我们写出更灵活的代码。但是反射不应该被滥用，原因有以下三个。
-
-1. 基于反射的代码是极其脆弱的，反射中的类型错误会在真正运行的时候才会引发panic，那很可能是在代码写完的很长时间之后。
-2. 大量使用反射的代码通常难以理解。
-3. 反射的性能低下，基于反射实现的代码通常比正常代码运行速度慢一到两个数量级。
-
----
-
-### 并发
+### goroutine协程
 
 并发编程在当前软件领域是一个非常重要的概念，随着CPU等硬件的发展，我们无一例外的想让我们的程序运行的快一点、再快一点。Go语言在语言层面天生支持并发，充分利用现代CPU的多核优势，这也是Go语言能够大范围流行的一个很重要的原因。
 
@@ -2333,7 +1850,7 @@ go func(){
 
 在经历数个版本的迭代之后，目前 Go 语言的调度器采用的是 `GPM` 调度模型。
 
-![gpm](assets/gpm.png)
+<img src="Go note.assets/gpm.png" alt="gpm" style="zoom:67%;" />
 
 其中：
 
@@ -2344,17 +1861,29 @@ go func(){
 - M：线程想运行任务就得获取 P，从 P 的本地队列获取 G，当 P 的本地队列为空时，M 也会尝试从全局队列或其他 P 的本地队列获取 G。M 运行 G，G 执行之后，M 会从 P 获取下一个 G，不断重复下去。
 - Goroutine 调度器和操作系统调度器是通过 M 结合起来的，每个 M 都代表了1个内核线程，操作系统调度器负责把内核线程分配到 CPU 的核上执行。
 
+ **goroutine 则是由Go运行时（runtime）自己的调度器调度的，完全是在用户态下完成的， 不涉及内核态与用户态之间的频繁切换**
+
 单从线程调度讲，Go语言相比起其他语言的优势在于OS线程是由OS内核来调度的， goroutine 则是由Go运行时（runtime）自己的调度器调度的，完全是在用户态下完成的， 不涉及内核态与用户态之间的频繁切换，包括内存的分配与释放，都是在用户态维护着一块大的内存池， 不直接调用系统的malloc函数（除非内存池需要改变），成本比调度OS线程低很多。 另一方面充分利用了多核的硬件资源，近似的把若干goroutine均分在物理线程上， 再加上本身 goroutine 的超轻量级，以上种种特性保证了 goroutine 调度方面的性能。
+
+
 
 #### GOMAXPROCS
 
 Go运行时的调度器使用`GOMAXPROCS`参数来确定需要使用多少个 OS 线程来同时执行 Go 代码。默认值是机器上的 CPU 核心数。例如在一个 8 核心的机器上，GOMAXPROCS 默认为 8。Go语言中可以通过`runtime.GOMAXPROCS`函数设置当前程序并发时占用的 CPU逻辑核心数。（Go1.5版本之前，默认使用的是单核心执行。Go1.5 版本之后，默认使用全部的CPU 逻辑核心数。）
 
+
+
+
+
 ---
 
-### 			channel
 
-channel单纯地将函数并发执行是没有意义的。函数与函数间需要交换数据才能体现并发执行函数的意义。
+
+
+
+### 			channel通道
+
+单纯地将函数并发执行是没有意义的。函数与函数间需要交换数据才能体现并发执行函数的意义。
 
 虽然可以使用共享内存进行数据交换，但是共享内存在不同的 goroutine 中容易发生竞态问题。为了保证数据交换的正确性，很多并发模型中必须使用互斥量对内存进行加锁，这种做法势必造成性能问题。
 
@@ -2381,7 +1910,9 @@ var 变量名称 chan 元素类型
 
 ```go
 var ch1 chan int   // 声明一个传递整型的通道
+
 var ch2 chan bool  // 声明一个传递布尔型的通道
+
 var ch3 chan []int // 声明一个传递int切片的通道
 ```
 
@@ -2688,7 +2219,7 @@ ch5 = ch4          // 变量赋值时将ch4转为单向通道
 
 下面的表格中总结了对不同状态下的通道执行相应操作的结果。
 
-![img](assets/channel.png)
+![img](https://www.liwenzhou.com/images/Go/concurrence/channel.png)
 
 **注意：**对已经关闭的通道再执行 close 也会引发 panic。
 
@@ -3332,6 +2863,876 @@ func main() {
 
 ---
 
+### 包（package）
+
+#### 标识符可见性
+
+在同一个包内部声明的标识符都位于同一个命名空间下，在不同的包内部声明的标识符就属于不同的命名空间。想要在包的外部使用包内部的标识符就需要添加包名前缀，例如`fmt.Println("Hello world!")`，就是指调用`fmt`包中的`Println`函数。
+
+如果想让一个包中的标识符（如变量、常量、类型、函数等）能被外部的包使用，那么标识符必须是对外可见的（public）。在Go语言中是通过标识符的首字母大/小写来控制标识符的对外可见（public）/不可见（private）的。在一个包内部只有首字母大写的标识符才是对外可见的。
+
+#### init初始化函数
+
+在每一个Go源文件中，都可以定义任意个如下格式的特殊函数：
+
+```go
+func init(){
+  // ...
+}
+```
+
+这种特殊的函数不接收任何参数也没有任何返回值，我们也不能在代码中主动调用它。当程序启动的时候，init函数会按照它们声明的顺序自动执行。
+
+一个包的初始化过程是按照代码中引入的顺序来进行的，所有在该包中声明的`init`函数都将被串行调用并且仅调用执行一次。每一个包初始化的时候都是先执行依赖的包中声明的`init`函数再执行当前包中声明的`init`函数。确保在程序的`main`函数开始执行时所有的依赖包都已初始化完成。![包初始化函数执行顺序示意图](assets/package01.png)
+
+每一个包的初始化是先从初始化包级别变量开始的。例如从下面的示例中我们就可以看出包级别变量的初始化会先于`init`初始化函数。
+
+#### go module
+
+在Go语言的早期版本中，我们编写Go项目代码时所依赖的所有第三方包都需要保存在GOPATH这个目录下面。这样的依赖管理方式存在一个致命的缺陷，那就是不支持版本管理，同一个依赖包只能存在一个版本的代码。可是我们本地的多个项目完全可能分别依赖同一个第三方包的不同版本。
+
+**go module介绍**
+
+Go module 是 Go1.11 版本发布的依赖管理方案，从 Go1.14 版本开始推荐在生产环境使用，于Go1.16版本默认开启。
+
+#### 使用go module引入包
+
+接下来我们将通过一个示例来演示如何在开发项目时使用 go module 拉取和管理项目依赖。
+
+**初始化项目** 我们在本地新建一个名为`holiday`项目，按如下方式创建一个名为`holiday`的文件夹并切换到该目录下：
+
+```bash
+$ mkdir holiday
+$ cd holiday
+```
+
+目前我们位于`holiday`文件夹下，接下来执行下面的命令初始化项目。
+
+```bash
+$ go mod init holiday
+go: creating new go.mod: module holiday
+```
+
+该命令会自动在项目目录下创建一个`go.mod`文件，其内容如下。
+
+```go
+module holiday
+
+go 1.16
+```
+
+其中：
+
+- module holiday：定义当前项目的导入路径
+- go 1.16：标识当前项目使用的 Go 版本
+
+`go.mod`文件会记录项目使用的第三方依赖包信息，包括包名和版本，由于我们的`holiday`项目目前还没有使用到第三方依赖包，所以`go.mod`文件暂时还没有记录任何依赖包信息，只有当前项目的一些信息。
+
+接下来，我们在项目目录下新建一个`main.go`文件，其内容如下：
+
+```go
+// holiday/main.go
+
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("现在是假期时间...")
+}
+```
+
+然后，我们的`holiday`项目现在需要引入一个第三方包`github.com/q1mi/hello`来实现一些必要的功能。类似这样的场景在我们的日常开发中是很常见的。我们需要先将依赖包下载到本地同时在`go.mod`中记录依赖信息，然后才能在我们的代码中引入并使用这个包。下载依赖包主要有两种方法。
+
+第一种方法是在项目目录下执行`go get`命令手动下载依赖的包：
+
+```bash
+holiday $ go get -u github.com/q1mi/hello
+go get: added github.com/q1mi/hello v0.1.1
+```
+
+这样默认会下载最新的发布版本，你也可以指定想要下载指定的版本号的。
+
+```bash
+holiday $ go get -u github.com/q1mi/hello@v0.1.0
+go: downloading github.com/q1mi/hello v0.1.0
+go get: downgraded github.com/q1mi/hello v0.1.1 => v0.1.0
+```
+
+如果依赖包没有发布任何版本则会拉取最新的提交，最终`go.mod`中的依赖信息会变成类似下面这种由默认v0.0.0的版本号和最新一次commit的时间和hash组成的版本格式：
+
+```go
+require github.com/q1mi/hello v0.0.0-20210218074646-139b0bcd549d
+```
+
+如果想指定下载某个commit对应的代码，可以直接指定commit hash，不过没有必要写出完整的commit hash，一般前7位即可。例如：
+
+```bash
+holiday $ go get github.com/q1mi/hello@2ccfadd
+go: downloading github.com/q1mi/hello v0.1.2-0.20210219092711-2ccfaddad6a3
+go get: added github.com/q1mi/hello v0.1.2-0.20210219092711-2ccfaddad6a3
+```
+
+此时，我们打开`go.mod`文件就可以看到下载的依赖包及版本信息都已经被记录下来了。
+
+```go
+module holiday
+
+go 1.16
+
+require github.com/q1mi/hello v0.1.0 // indirect
+```
+
+行尾的`indirect`表示该依赖包为间接依赖，说明在当前程序中的所有 import 语句中没有发现引入这个包。
+
+另外在执行`go get`命令下载一个新的依赖包时一般会额外添加`-u`参数，强制更新现有依赖。
+
+第二种方式是我们直接编辑`go.mod`文件，将依赖包和版本信息写入该文件。例如我们修改`holiday/go.mod`文件内容如下：
+
+```go
+module holiday
+
+go 1.16
+
+require github.com/q1mi/hello latest
+```
+
+表示当前项目需要使用`github.com/q1mi/hello`库的最新版本，然后在项目目录下执行`go mod download`下载依赖包。
+
+---
+
+### 泛型
+
+Go 1.18版本增加了对泛型的支持，泛型也是自 Go 语言开源以来所做的最大改变。
+
+#### 什么是泛型
+
+泛型允许程序员在强类型程序设计语言中编写代码时使用一些以后才指定的类型，在实例化时作为参数指明这些类型。ーー换句话说，在编写某些代码或数据结构时先不提供值的类型，而是之后再提供。
+
+泛型是一种独立于所使用的特定类型的编写代码的方法。使用泛型可以编写出适用于一组类型中的任何一种的函数和类型。
+
+#### 为什么需要泛型
+
+假设我们需要实现一个反转切片的函数——`reverse`。
+
+```go
+func reverse(s []int) []int {
+	l := len(s)
+	r := make([]int, l)
+
+	for i, e := range s {
+		r[l-i-1] = e
+	}
+	return r
+}
+
+fmt.Println(reverse([]int{1, 2, 3, 4}))  // [4 3 2 1]
+```
+
+可是这个函数只能接收`[]int`类型的参数，如果我们想支持`[]float64`类型的参数，我们就需要再定义一个`reverseFloat64Slice`函数。
+
+```go
+func reverseFloat64Slice(s []float64) []float64 {
+	l := len(s)
+	r := make([]float64, l)
+
+	for i, e := range s {
+		r[l-i-1] = e
+	}
+	return r
+}
+```
+
+如果要想支持`[]string`类型切片就要定义`reverseStringSlice`函数，如果想支持`[]xxx`就需要定义一个`reverseXxxSlice`…
+
+一遍一遍地编写相同的功能是低效的，实际上这个反转切片的函数并不需要知道切片中元素的类型，但为了适用不同的类型我们把一段代码重复了很多遍。
+
+Go1.18之前我们可以尝试使用反射去解决上述问题，但是使用反射在运行期间获取变量类型会降低代码的执行效率并且失去编译期的类型检查，同时大量的反射代码也会让程序变得晦涩难懂。
+
+类似这样的场景就非常适合使用泛型。从Go1.18开始，使用泛型就能够编写出适用所有元素类型的“普适版”`reverse`函数。
+
+```go
+func reverseWithGenerics[T any](s []T) []T {
+	l := len(s)
+	r := make([]T, l)
+
+	for i, e := range s {
+		r[l-i-1] = e
+	}
+	return r
+}
+```
+
+#### 泛型语法
+
+泛型为Go语言添加了三个新的重要特性:
+
+1. 函数和类型的类型参数。
+2. 将接口类型定义为类型集，包括没有方法的类型。
+3. 类型推断，它允许在调用函数时在许多情况下省略类型参数。
+
+#### 类型参数
+
+#### 类型形参和类型实参
+
+我们之前已经知道函数定义时可以指定形参，函数调用时需要传入实参。![形参与实参](Go note.assets/parameter-argument.png)
+
+现在，Go语言中的函数和类型支持添加类型参数。类型参数列表看起来像普通的参数列表，只不过它使用方括号（`[]`）而不是圆括号（`()`）。![类型形参与类型实参](Go note.assets/type-parameter-argument.png)
+
+借助泛型，我们可以声明一个适用于**一组类型**的`min`函数。
+
+```go
+func min[T int | float64](a, b T) T {
+	if a <= b {
+		return a
+	}
+	return b
+}
+```
+
+#### 类型实例化
+
+这次定义的`min`函数就同时支持`int`和`float64`两种类型，也就是说当调用`min`函数时，我们既可以传入`int`类型的参数。
+
+```go
+m1 := min[int](1, 2)  // 1
+```
+
+也可以传入`float64`类型的参数。
+
+```go
+m2 := min[float64](-0.1, -0.2)  // -0.2
+```
+
+向 `min` 函数提供类型参数(在本例中为`int`和`float64`)称为实例化（ *instantiation* ）。
+
+类型实例化分两步进行：
+
+1. 首先，编译器在整个泛型函数或类型中将所有类型形参（type parameters）替换为它们各自的类型实参（type arguments）。
+2. 其次，编译器验证每个类型参数是否满足相应的约束。
+
+在成功实例化之后，我们将得到一个非泛型函数，它可以像任何其他函数一样被调用。例如：
+
+```go
+fmin := min[float64] // 类型实例化，编译器生成T=float64的min函数
+m2 = fmin(1.2, 2.3)  // 1.2
+```
+
+`min[float64]`得到的是类似我们之前定义的`minFloat64`函数——`fmin`，我们可以在函数调用中使用它。
+
+#### 类型参数的使用
+
+除了函数中支持使用类型参数列表外，类型也可以使用类型参数列表。
+
+```go
+type Slice[T int | string] []T
+
+type Map[K int | string, V float32 | float64] map[K]V
+
+type Tree[T interface{}] struct {
+	left, right *Tree[T]
+	value       T
+}
+```
+
+在上述泛型类型中，`T`、`K`、`V`都属于类型形参，类型形参后面是类型约束，类型实参需要满足对应的类型约束。
+
+泛型类型可以有方法，例如为上面的`Tree`实现一个查找元素的`Lookup`方法。
+
+```go
+func (t *Tree[T]) Lookup(x T) *Tree[T] { ... }
+```
+
+要使用泛型类型，必须进行实例化。`Tree[string]`是使用类型实参`string`实例化 `Tree` 的示例。
+
+```go
+var stringTree Tree[string]
+```
+
+#### 类型约束
+
+普通函数中的每个参数都有一个类型; 该类型定义一系列值的集合。例如，我们上面定义的非泛型函数`minFloat64`那样，声明了参数的类型为`float64`，那么在函数调用时允许传入的实际参数就必须是可以用`float64`类型表示的浮点数值。
+
+类似于参数列表中每个参数都有对应的参数类型，类型参数列表中每个类型参数都有一个**类型约束**。类型约束定义了一个类型集——只有在这个类型集中的类型才能用作类型实参。
+
+Go语言中的类型约束是接口类型。
+
+就以上面提到的`min`函数为例，我们来看一下类型约束常见的两种方式。
+
+类型约束接口可以直接在类型参数列表中使用。
+
+```go
+// 类型约束字面量，通常外层interface{}可省略
+func min[T interface{ int | float64 }](a, b T) T {
+	if a <= b {
+		return a
+	}
+	return b
+}
+```
+
+作为类型约束使用的接口类型可以事先定义并支持复用。
+
+```go
+// 事先定义好的类型约束类型
+type Value interface {
+	int | float64
+}
+func min[T Value](a, b T) T {
+	if a <= b {
+		return a
+	}
+	return b
+}
+```
+
+在使用类型约束时，如果省略了外层的`interface{}`会引起歧义，那么就不能省略。例如：
+
+```go
+type IntPtrSlice [T *int] []T  // T*int ?
+
+type IntPtrSlice[T *int,] []T  // 只有一个类型约束时可以添加`,`
+type IntPtrSlice[T interface{ *int }] []T // 使用interface{}包裹
+```
+
+#### 类型集
+
+**Go1.18开始接口类型的定义也发生了改变，由过去的接口类型定义方法集（method set）变成了接口类型定义类型集（type set）。**也就是说，接口类型现在可以用作值的类型，也可以用作类型约束。
+
+![type set](Go note.assets/type-set.png)
+
+把接口类型当做类型集相较于方法集有一个优势: 我们可以显式地向集合添加类型，从而以新的方式控制类型集。
+
+Go语言扩展了接口类型的语法，让我们能够向接口中添加类型。例如
+
+```go
+type V interface {
+	int | string | bool
+}
+```
+
+上面的代码就定义了一个包含 `int`、 `string` 和 `bool` 类型的类型集。![type set](Go note.assets/type-set-2.png)
+
+从 Go 1.18 开始，一个接口不仅可以嵌入其他接口，还可以嵌入任何类型、类型的联合或共享相同底层类型的无限类型集合。
+
+当用作类型约束时，由接口定义的类型集精确地指定允许作为相应类型参数的类型。
+
+- `|`符号
+
+  `T1 | T2`表示类型约束为T1和T2这两个类型的并集，例如下面的`Integer`类型表示由`Signed`和`Unsigned`组成。
+
+  ```go
+  type Integer interface {
+  	Signed | Unsigned
+  }
+  ```
+
+- `~`符号
+
+  `~T`表示所以底层类型是T的类型，例如`~string`表示所有底层类型是`string`的类型集合。
+
+  ```go
+  type MyString string  // MyString的底层类型是string
+  ```
+
+  **注意：**`~`符号后面只能是基本类型。
+
+接口作为类型集是一种强大的新机制，是使类型约束能够生效的关键。目前，使用新语法表的接口只能用作类型约束。
+
+#### any接口
+
+空接口在类型参数列表中很常见，在Go 1.18引入了一个新的预声明标识符，作为空接口类型的别名。
+
+```go
+// src/builtin/builtin.go
+
+type any = interface{}
+```
+
+由此，我们可以使用如下代码：
+
+```go
+func foo[S ~[]E, E any]() {
+	// ...
+}
+```
+
+#### constrains
+
+https://pkg.go.dev/golang.org/x/exp/constraints 包提供了一些常用类型。
+
+#### 类型推断
+
+最后一个新的主要语言特征是类型推断。从某些方面来说，这是语言中最复杂的变化，但它很重要，因为它能让人们在编写调用泛型函数的代码时更自然。
+
+#### 函数参数类型推断
+
+对于类型参数，需要传递类型参数，这可能导致代码冗长。回到我们通用的 `min`函数：
+
+```go
+func min[T int | float64](a, b T) T {
+	if a <= b {
+		return a
+	}
+	return b
+}
+```
+
+类型形参`T`用于指定`a`和`b`的类型。我们可以使用显式类型实参调用它：
+
+```go
+var a, b, m float64
+m = min[float64](a, b) // 显式指定类型实参
+```
+
+在许多情况下，编译器可以从普通参数推断 `T` 的类型实参。这使得代码更短，同时保持清晰。
+
+```go
+var a, b, m float64
+
+m = min(a, b) // 无需指定类型实参
+```
+
+这种从实参的类型推断出函数的类型实参的推断称为函数实参类型推断。函数实参类型推断只适用于函数参数中使用的类型参数，而不适用于仅在函数结果中或仅在函数体中使用的类型参数。例如，它不适用于像 `MakeT [ T any ]() T` 这样的函数，因为它只使用 `T` 表示结果。
+
+#### 约束类型推断
+
+Go 语言支持另一种类型推断，即*约束类型推断*。接下来我们从下面这个缩放整数的例子开始：
+
+```go
+// Scale 返回切片中每个元素都乘c的副本切片
+func Scale[E constraints.Integer](s []E, c E) []E {
+    r := make([]E, len(s))
+    for i, v := range s {
+        r[i] = v * c
+    }
+    return r
+}
+```
+
+这是一个泛型函数适用于任何整数类型的切片。
+
+现在假设我们有一个多维坐标的 `Point` 类型，其中每个 `Point` 只是一个给出点坐标的整数列表。这种类型通常会实现一些业务方法，这里假设它有一个`String`方法。
+
+```go
+type Point []int32
+
+func (p Point) String() string {
+    b, _ := json.Marshal(p)
+    return string(b)
+}
+```
+
+由于一个`Point`其实就是一个整数切片，我们可以使用前面编写的`Scale`函数：
+
+```go
+func ScaleAndPrint(p Point) {
+    r := Scale(p, 2)
+    fmt.Println(r.String()) // 编译失败
+}
+```
+
+不幸的是，这代码会编译失败，输出`r.String undefined (type []int32 has no field or method String`的错误。
+
+问题是`Scale`函数返回类型为`[]E`的值，其中`E`是参数切片的元素类型。当我们使用`Point`类型的值调用`Scale`（其基础类型为[]int32）时，我们返回的是`[]int32`类型的值，而不是`Point`类型。这源于泛型代码的编写方式，但这不是我们想要的。
+
+为了解决这个问题，我们必须更改 `Scale` 函数，以便为切片类型使用类型参数。
+
+```go
+func Scale[S ~[]E, E constraints.Integer](s S, c E) S {
+    r := make(S, len(s))
+    for i, v := range s {
+        r[i] = v * c
+    }
+    return r
+}
+```
+
+我们引入了一个新的类型参数`S`，它是切片参数的类型。我们对它进行了约束，使得基础类型是`S`而不是`[]E`，函数返回的结果类型现在是`S`。由于`E`被约束为整数，因此效果与之前相同：第一个参数必须是某个整数类型的切片。对函数体的唯一更改是，现在我们在调用`make`时传递`S`，而不是`[]E`。
+
+现在这个`Scale`函数，不仅支持传入普通整数切片参数，也支持传入`Point`类型参数。
+
+这里需要思考的是，为什么不传递显式类型参数就可以写入 `Scale` 调用？也就是说，为什么我们可以写 `Scale(p, 2)`，没有类型参数，而不是必须写 `Scale[Point, int32](p, 2)` ？
+
+新 `Scale` 函数有两个类型参数——`S` 和 `E`。在不传递任何类型参数的 `Scale(p, 2)` 调用中，如上所述，函数参数类型推断让编译器推断 `S` 的类型参数是 `Point`。但是这个函数也有一个类型参数 `E`，它是乘法因子 `c` 的类型。相应的函数参数是`2`，因为`2`是一个非类型化的常量，函数参数类型推断不能推断出 `E` 的正确类型(最好的情况是它可以推断出`2`的默认类型是 `int`，而这是错误的，因为Point 的基础类型是`[]int32`)。相反，编译器推断 `E` 的类型参数是切片的元素类型的过程称为**约束类型推断**。
+
+约束类型推断从类型参数约束推导类型参数。当一个类型参数具有根据另一个类型参数定义的约束时使用。当其中一个类型参数的类型参数已知时，约束用于推断另一个类型参数的类型参数。
+
+通常的情况是，当一个约束对某种类型使用 *~type* 形式时，该类型是使用其他类型参数编写的。我们在 `Scale` 的例子中看到了这一点。`S` 是 `~[]E`，后面跟着一个用另一个类型参数写的类型`[]E`。如果我们知道了 `S` 的类型实参，我们就可以推断出`E`的类型实参。`S` 是一个切片类型，而 `E`是该切片的元素类型。
+
+#### 总结
+
+总之，如果你发现自己多次编写完全相同的代码，而这些代码之间的唯一区别就是使用的类型不同，这个时候你就应该考虑是否可以使用类型参数。
+
+泛型和接口类型之间并不是替代关系，而是相辅相成的关系。泛型的引入是为了配合接口的使用，让我们能够编写更加类型安全的Go代码，并能有效地减少重复代码。
+
+
+
+---
+
+### 反射
+
+#### 变量的内在机制
+
+Go语言中的变量是分为两部分的:
+
+- 类型信息：预先定义好的元信息。
+
+- 值信息：程序运行过程中可动态变化的。
+
+#### 反射介绍
+
+反射是指在程序运行期间对程序本身进行访问和修改的能力。程序在编译时，变量被转换为内存地址，变量名不会被编译器写入到可执行部分。在运行程序时，程序无法获取自身的信息。
+
+支持反射的语言可以在程序编译期间将变量的反射信息，如字段名称、类型信息、结构体信息等整合到可执行文件中，并给程序提供接口访问反射信息，这样就可以在程序运行期间获取类型的反射信息，并且有能力修改它们。
+
+Go程序在运行期间使用reflect包访问程序的反射信息。
+
+在上一篇博客中我们介绍了空接口。 空接口可以存储任意类型的变量，那我们如何知道这个空接口保存的数据是什么呢？ 反射就是在运行时动态的获取一个变量的类型信息和值信息。
+
+#### reflect包
+
+在Go语言的反射机制中，任何接口值都由是一个具体类型和具体类型的值两部分组成的(我们在上一篇接口的博客中有介绍相关概念)。 在Go语言中反射的相关功能由内置的reflect包提供，任意接口值在反射中都可以理解为由reflect.Type和reflect.Value两部分组成，并且reflect包提供了reflect.TypeOf和reflect.ValueOf两个函数来获取任意对象的Value和Type。
+
+#### TypeOf
+
+在Go语言中，使用`reflect.TypeOf()`函数可以获得任意值的类型对象（reflect.Type），程序通过类型对象可以访问任意值的类型信息。
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+func reflectType(x interface{}) {
+	v := reflect.TypeOf(x)
+	fmt.Printf("type:%v\n", v)
+}
+func main() {
+	var a float32 = 3.14
+	reflectType(a) // type:float32
+	var b int64 = 100
+	reflectType(b) // type:int64
+}
+```
+
+##### type name和type kind
+
+在反射中关于类型还划分为两种：`类型（Type）`和`种类（Kind）`。因为在Go语言中我们可以使用type关键字构造很多自定义类型，而`种类（Kind）`就是指底层的类型，但在反射中，当需要区分指针、结构体等大品种的类型时，就会用到`种类（Kind）`。 举个例子，我们定义了两个指针类型和两个结构体类型，通过反射查看它们的类型和种类。
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+type myInt int64
+
+func reflectType(x interface{}) {
+	t := reflect.TypeOf(x)
+	fmt.Printf("type:%v kind:%v\n", t.Name(), t.Kind())
+}
+
+func main() {
+	var a *float32 // 指针
+	var b myInt    // 自定义类型
+	var c rune     // 类型别名
+	reflectType(a) // type: kind:ptr
+	reflectType(b) // type:myInt kind:int64
+	reflectType(c) // type:int32 kind:int32
+
+	type person struct {
+		name string
+		age  int
+	}
+	type book struct{ title string }
+	var d = person{
+		name: "沙河小王子",
+		age:  18,
+	}
+	var e = book{title: "《跟小王子学Go语言》"}
+	reflectType(d) // type:person kind:struct
+	reflectType(e) // type:book kind:struct
+}
+```
+
+Go语言的反射中像数组、切片、Map、指针等类型的变量，它们的`.Name()`都是返回`空`。
+
+在`reflect`包中定义的Kind类型如下：
+
+```go
+type Kind uint
+const (
+    Invalid Kind = iota  // 非法类型
+    Bool                 // 布尔型
+    Int                  // 有符号整型
+    Int8                 // 有符号8位整型
+    Int16                // 有符号16位整型
+    Int32                // 有符号32位整型
+    Int64                // 有符号64位整型
+    Uint                 // 无符号整型
+    Uint8                // 无符号8位整型
+    Uint16               // 无符号16位整型
+    Uint32               // 无符号32位整型
+    Uint64               // 无符号64位整型
+    Uintptr              // 指针
+    Float32              // 单精度浮点数
+    Float64              // 双精度浮点数
+    Complex64            // 64位复数类型
+    Complex128           // 128位复数类型
+    Array                // 数组
+    Chan                 // 通道
+    Func                 // 函数
+    Interface            // 接口
+    Map                  // 映射
+    Ptr                  // 指针
+    Slice                // 切片
+    String               // 字符串
+    Struct               // 结构体
+    UnsafePointer        // 底层指针
+)
+```
+
+#### ValueOf
+
+`reflect.ValueOf()`返回的是`reflect.Value`类型，其中包含了原始值的值信息。`reflect.Value`与原始值之间可以互相转换。
+
+`reflect.Value`类型提供的获取原始值的方法如下：
+
+|           方法           |                             说明                             |
+| :----------------------: | :----------------------------------------------------------: |
+| Interface() interface {} | 将值以 interface{} 类型返回，可以通过类型断言转换为指定类型  |
+|       Int() int64        |     将值以 int 类型返回，所有有符号整型均可以此方式返回      |
+|      Uint() uint64       |     将值以 uint 类型返回，所有无符号整型均可以此方式返回     |
+|     Float() float64      | 将值以双精度（float64）类型返回，所有浮点数（float32、float64）均可以此方式返回 |
+|       Bool() bool        |                     将值以 bool 类型返回                     |
+|     Bytes() []bytes      |               将值以字节数组 []bytes 类型返回                |
+|     String() string      |                     将值以字符串类型返回                     |
+
+#### 通过反射获取值
+
+```go
+func reflectValue(x interface{}) {
+	v := reflect.ValueOf(x)
+	k := v.Kind()
+	switch k {
+	case reflect.Int64:
+		// v.Int()从反射中获取整型的原始值，然后通过int64()强制类型转换
+		fmt.Printf("type is int64, value is %d\n", int64(v.Int()))
+	case reflect.Float32:
+		// v.Float()从反射中获取浮点型的原始值，然后通过float32()强制类型转换
+		fmt.Printf("type is float32, value is %f\n", float32(v.Float()))
+	case reflect.Float64:
+		// v.Float()从反射中获取浮点型的原始值，然后通过float64()强制类型转换
+		fmt.Printf("type is float64, value is %f\n", float64(v.Float()))
+	}
+}
+func main() {
+	var a float32 = 3.14
+	var b int64 = 100
+	reflectValue(a) // type is float32, value is 3.140000
+	reflectValue(b) // type is int64, value is 100
+	// 将int类型的原始值转换为reflect.Value类型
+	c := reflect.ValueOf(10)
+	fmt.Printf("type c :%T\n", c) // type c :reflect.Value
+}
+```
+
+#### 通过反射设置变量的值
+
+想要在函数中通过反射修改变量的值，需要注意函数参数传递的是值拷贝，必须传递变量地址才能修改变量值。而反射中使用专有的`Elem()`方法来获取指针对应的值。
+
+```go
+package main
+
+import (
+	"fmt"
+	"reflect"
+)
+
+func reflectSetValue1(x interface{}) {
+	v := reflect.ValueOf(x)
+	if v.Kind() == reflect.Int64 {
+		v.SetInt(200) //修改的是副本，reflect包会引发panic
+	}
+}
+func reflectSetValue2(x interface{}) {
+	v := reflect.ValueOf(x)
+	// 反射中使用 Elem()方法获取指针对应的值
+	if v.Elem().Kind() == reflect.Int64 {
+		v.Elem().SetInt(200)
+	}
+}
+func main() {
+	var a int64 = 100
+	// reflectSetValue1(a) //panic: reflect: reflect.Value.SetInt using unaddressable value
+	reflectSetValue2(&a)
+	fmt.Println(a)
+}
+```
+
+#### isNil()和isValid()
+
+##### isNil()
+
+```go
+func (v Value) IsNil() bool
+```
+
+`IsNil()`报告v持有的值是否为nil。v持有的值的分类必须是通道、函数、接口、映射、指针、切片之一；否则IsNil函数会导致panic。
+
+##### isValid()
+
+```go
+func (v Value) IsValid() bool
+```
+
+`IsValid()`返回v是否持有一个值。如果v是Value零值会返回假，此时v除了IsValid、String、Kind之外的方法都会导致panic。
+
+**举个例子**
+
+`IsNil()`常被用于判断指针是否为空；`IsValid()`常被用于判定返回值是否有效。
+
+```go
+func main() {
+	// *int类型空指针
+	var a *int
+	fmt.Println("var a *int IsNil:", reflect.ValueOf(a).IsNil())
+	// nil值
+	fmt.Println("nil IsValid:", reflect.ValueOf(nil).IsValid())
+	// 实例化一个匿名结构体
+	b := struct{}{}
+	// 尝试从结构体中查找"abc"字段
+	fmt.Println("不存在的结构体成员:", reflect.ValueOf(b).FieldByName("abc").IsValid())
+	// 尝试从结构体中查找"abc"方法
+	fmt.Println("不存在的结构体方法:", reflect.ValueOf(b).MethodByName("abc").IsValid())
+	// map
+	c := map[string]int{}
+	// 尝试从map中查找一个不存在的键
+	fmt.Println("map中不存在的键：", reflect.ValueOf(c).MapIndex(reflect.ValueOf("娜扎")).IsValid())
+}
+```
+
+#### 结构体反射
+
+##### 与结构体相关的方法
+
+任意值通过`reflect.TypeOf()`获得反射对象信息后，如果它的类型是结构体，可以通过反射值对象（`reflect.Type`）的`NumField()`和`Field()`方法获得结构体成员的详细信息。
+
+`reflect.Type`中与获取结构体成员相关的的方法如下表所示。
+
+|                            方法                             |                             说明                             |
+| :---------------------------------------------------------: | :----------------------------------------------------------: |
+|                  Field(i int) StructField                   |          根据索引，返回索引对应的结构体字段的信息。          |
+|                       NumField() int                        |                   返回结构体成员字段数量。                   |
+|        FieldByName(name string) (StructField, bool)         |       根据给定字符串返回字符串对应的结构体字段的信息。       |
+|            FieldByIndex(index []int) StructField            | 多层成员访问时，根据 []int 提供的每个结构体的字段索引，返回字段的信息。 |
+| FieldByNameFunc(match func(string) bool) (StructField,bool) |              根据传入的匹配函数匹配需要的字段。              |
+|                       NumMethod() int                       |                返回该类型的方法集中方法的数目                |
+|                     Method(int) Method                      |                返回该类型方法集中的第i个方法                 |
+|             MethodByName(string)(Method, bool)              |              根据方法名返回该类型方法集中的方法              |
+
+##### StructField类型
+
+`StructField`类型用来描述结构体中的一个字段的信息。
+
+`StructField`的定义如下：
+
+```go
+type StructField struct {
+    // Name是字段的名字。PkgPath是非导出字段的包路径，对导出字段该字段为""。
+    // 参见http://golang.org/ref/spec#Uniqueness_of_identifiers
+    Name    string
+    PkgPath string
+    Type      Type      // 字段的类型
+    Tag       StructTag // 字段的标签
+    Offset    uintptr   // 字段在结构体中的字节偏移量
+    Index     []int     // 用于Type.FieldByIndex时的索引切片
+    Anonymous bool      // 是否匿名字段
+}
+```
+
+##### 结构体反射示例
+
+当我们使用反射得到一个结构体数据之后可以通过索引依次获取其字段信息，也可以通过字段名去获取指定的字段信息。
+
+```go
+type student struct {
+	Name  string `json:"name"`
+	Score int    `json:"score"`
+}
+
+func main() {
+	stu1 := student{
+		Name:  "小王子",
+		Score: 90,
+	}
+
+	t := reflect.TypeOf(stu1)
+	fmt.Println(t.Name(), t.Kind()) // student struct
+	// 通过for循环遍历结构体的所有字段信息
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		fmt.Printf("name:%s index:%d type:%v json tag:%v\n", field.Name, field.Index, field.Type, field.Tag.Get("json"))
+	}
+
+	// 通过字段名获取指定结构体字段信息
+	if scoreField, ok := t.FieldByName("Score"); ok {
+		fmt.Printf("name:%s index:%d type:%v json tag:%v\n", scoreField.Name, scoreField.Index, scoreField.Type, scoreField.Tag.Get("json"))
+	}
+}
+```
+
+接下来编写一个函数`printMethod(s interface{})`来遍历打印s包含的方法。
+
+```go
+// 给student添加两个方法 Study和Sleep(注意首字母大写)
+func (s student) Study() string {
+	msg := "好好学习，天天向上。"
+	fmt.Println(msg)
+	return msg
+}
+
+func (s student) Sleep() string {
+	msg := "好好睡觉，快快长大。"
+	fmt.Println(msg)
+	return msg
+}
+
+func printMethod(x interface{}) {
+	t := reflect.TypeOf(x)
+	v := reflect.ValueOf(x)
+
+	fmt.Println(t.NumMethod())
+	for i := 0; i < v.NumMethod(); i++ {
+		methodType := v.Method(i).Type()
+		fmt.Printf("method name:%s\n", t.Method(i).Name)
+		fmt.Printf("method:%s\n", methodType)
+		// 通过反射调用方法传递的参数必须是 []reflect.Value 类型
+		var args = []reflect.Value{}
+		v.Method(i).Call(args)
+	}
+}
+```
+
+#### 反射是把双刃剑
+
+反射是一个强大并富有表现力的工具，能让我们写出更灵活的代码。但是反射不应该被滥用，原因有以下三个。
+
+1. 基于反射的代码是极其脆弱的，反射中的类型错误会在真正运行的时候才会引发panic，那很可能是在代码写完的很长时间之后。
+
+2. 大量使用反射的代码通常难以理解。
+
+3. 反射的性能低下，基于反射实现的代码通常比正常代码运行速度慢一到两个数量级。
+
+   
+
+---
+
 ### 文件读写
 
 
@@ -3427,7 +3828,11 @@ func main() {
 
 #### 互联网分层模型
 
-互联网的逻辑实现被分为好几层。每一层都有自己的功能，就像建筑物一样，每一层都靠下一层支持。用户接触到的只是最上面的那一层，根本不会感觉到下面的几层。要理解互联网就需要自下而上理解每一层的实现的功能。![osi七层模型](assets/osi.png)如上图所示，互联网按照不同的模型划分会有不用的分层，但是不论按照什么模型去划分，越往上的层越靠近用户，越往下的层越靠近硬件。在软件开发中我们使用最多的是上图中将互联网划分为五个分层的模型。
+互联网的逻辑实现被分为好几层。每一层都有自己的功能，就像建筑物一样，每一层都靠下一层支持。用户接触到的只是最上面的那一层，根本不会感觉到下面的几层。要理解互联网就需要自下而上理解每一层的实现的功能。如上图所示，互联网按照不同的模型划分会有不用的分层，但是不论按照什么模型去划分，越往上的层越靠近用户，越往下的层越靠近硬件。在软件开发中我们使用最多的是上图中将互联网划分为五个分层的模型。
+
+![osi七层模型](Go note.assets/osi-20250308下午50025270.png)
+
+![HTTP数据传输图解](Go note.assets/httptcpip.png)
 
 #### TCP、UDP 
 
@@ -3445,7 +3850,117 @@ Socket是BSD UNIX的进程通信机制，通常也称作”套接字”，用于
 
 `Socket`是应用层与TCP/IP协议族通信的中间软件抽象层。在设计模式中，`Socket`其实就是一个门面模式，它把复杂的TCP/IP协议族隐藏在`Socket`后面，对用户来说只需要调用Socket规定的相关函数，让`Socket`去组织符合指定的协议数据然后进行通信。
 
-![socket图解](assets/socket.png)
+![socket图解](Go note.assets/socket.png)
+
+
+
+#### Go语言实现TCP通信
+
+##### TCP协议
+
+TCP/IP(Transmission Control Protocol/Internet Protocol) 即传输控制协议/网间协议，是一种面向连接（连接导向）的、可靠的、基于字节流的传输层（Transport layer）通信协议，因为是面向连接的协议，数据像水流一样传输，会存在黏包问题。
+
+##### TCP服务端
+
+一个TCP服务端可以同时连接很多个客户端，例如世界各地的用户使用自己电脑上的浏览器访问淘宝网。因为Go语言中创建多个goroutine实现并发非常方便和高效，所以我们可以每建立一次链接就创建一个goroutine去处理。
+
+TCP服务端程序的处理流程：
+
+1. 监听端口
+2. 接收客户端请求建立链接
+3. 创建goroutine处理链接。
+
+我们使用Go语言的net包实现的TCP服务端代码如下：
+
+```go
+// tcp/server/main.go
+
+// TCP server端
+
+// 处理函数
+func process(conn net.Conn) {
+	defer conn.Close() // 关闭连接
+	for {
+		reader := bufio.NewReader(conn)
+		var buf [128]byte
+		n, err := reader.Read(buf[:]) // 读取数据
+		if err != nil {
+			fmt.Println("read from client failed, err:", err)
+			break
+		}
+		recvStr := string(buf[:n])
+		fmt.Println("收到client端发来的数据：", recvStr)
+		conn.Write([]byte(recvStr)) // 发送数据
+	}
+}
+
+func main() {
+	listen, err := net.Listen("tcp", "127.0.0.1:20000")
+	if err != nil {
+		fmt.Println("listen failed, err:", err)
+		return
+	}
+	for {
+		conn, err := listen.Accept() // 建立连接
+		if err != nil {
+			fmt.Println("accept failed, err:", err)
+			continue
+		}
+		go process(conn) // 启动一个goroutine处理连接
+	}
+}
+
+```
+
+客户端代码如下：
+
+```go
+// socket_stick/client/main.go
+
+func main() {
+	conn, err := net.Dial("tcp", "127.0.0.1:30000")
+	if err != nil {
+		fmt.Println("dial failed, err", err)
+		return
+	}
+	defer conn.Close()
+	for i := 0; i < 20; i++ {
+		msg := `Hello, Hello. How are you?`
+		conn.Write([]byte(msg))
+	}
+}
+```
+
+将上面的代码保存后，分别编译。先启动服务端再启动客户端，可以看到服务端输出结果如下：
+
+```bash
+收到client发来的数据： Hello, Hello. How are you?Hello, Hello. How are you?Hello, Hello. How are you?Hello, Hello. How are you?Hello, Hello. How are you?
+收到client发来的数据： Hello, Hello. How are you?Hello, Hello. How are you?Hello, Hello. How are you?Hello, Hello. How are you?Hello, Hello. How are you?Hello, Hello. How are you?Hello, Hello. How are you?Hello, Hello. How are you?
+收到client发来的数据： Hello, Hello. How are you?Hello, Hello. How are you?
+收到client发来的数据： Hello, Hello. How are you?Hello, Hello. How are you?Hello, Hello. How are you?
+收到client发来的数据： Hello, Hello. How are you?Hello, Hello. How are you?
+```
+
+客户端分10次发送的数据，在服务端并没有成功的输出10次，而是多条数据“粘”到了一起。
+
+#### 为什么会出现粘包
+
+主要原因就是tcp数据传递模式是流模式，在保持长连接的时候可以进行多次的收和发。
+
+“粘包"可发生在发送端也可发生在接收端：
+
+1. 由Nagle算法造成的发送端的粘包：Nagle算法是一种改善网络传输效率的算法。简单来说就是当我们提交一段数据给TCP发送时，TCP并不立刻发送此段数据，而是等待一小段时间看看在等待期间是否还有要发送的数据，若有则会一次把这两段数据发送出去。
+2. 接收端接收不及时造成的接收端粘包：TCP会把接收到的数据存在自己的缓冲区中，然后通知应用层取数据。当应用层由于某些原因不能及时的把TCP的数据取出来，就会造成TCP缓冲区中存放了几段数据。
+
+#### 解决办法
+
+出现"粘包"的关键在于接收方不确定将要传输的数据包的大小，因此我们可以对数据包进行封包和拆包的操作。
+
+封包：封包就是给一段数据加上包头，这样一来数据包就分为包头和包体两部分内容了(过滤非法包时封包会加入"包尾"内容)。包头部分的长度是固定的，并且它存储了包体的长度，根据包头长度固定以及包头中含有包体长度的变量就能正确的拆分出一个完整的数据包。
+
+我们可以自己定义一个协议，比如数据包的前4个字节为包头，里面存储的是发送的数据的长度。
+
+
 
 ---
 
@@ -4097,9 +4612,74 @@ shopGroup.Use(StatCost())
 
 如果不想使用上面两个默认的中间件，可以使用`gin.New()`新建一个没有任何默认中间件的路由。
 
-##### gin中间件中使用goroutine
+#### gin中间件中使用goroutine
 
 当在中间件或`handler`中启动新的`goroutine`时，**不能使用**原始的上下文（c *gin.Context），必须使用其只读副本（`c.Copy()`）。
+
+在 Gin 框架中，当在中间件或 `handler` 中启动新的 `goroutine` 时，必须使用上下文的只读副本（`c.Copy()`）而非原始上下文（`c *gin.Context`），主要原因如下：
+
+------
+
+###### 1. **Gin 上下文的生命周期与 `sync.Pool` 重用机制**
+
+- Gin 使用 `sync.Pool` 来管理 `*gin.Context` 对象，以提高性能并减少内存分配开销。
+- **原始上下文（`c`）的生命周期仅限于当前请求的处理流程**。当请求处理完成后，Gin 会将 `c` 放回对象池中，供后续请求**重用**。
+- 如果在一个 `goroutine` 中直接使用 `c`，当主流程处理完成并释放 `c` 后，该 `goroutine` 可能仍在操作已被重用的 `c`，导致**数据竞争（Data Race）\**或\**脏数据**。
+
+------
+
+###### 2. **并发安全问题**
+
+- `*gin.Context` 内部包含请求参数、响应写入器（`ResponseWriter`）等共享状态。如果在多个 `goroutine` 中并发读写这些状态，会导致**竞态条件（Race Condition）**。
+
+- 例如：
+
+  ```go
+  go
+  
+  复制代码go func() {
+      // 错误！并发写入响应可能崩溃或数据错乱
+      c.JSON(200, gin.H{"result": "ok"})
+  }()
+  ```
+
+------
+
+###### 3. **`c.Copy()` 的作用**
+
+- `c.Copy()` 会创建一个**独立的副本**，包含原始上下文的所有数据（如请求参数、头信息等），但**不共享响应写入器或其他可变状态**。
+
+- 副本上下文是只读的，确保在 `goroutine` 中安全访问请求数据，同时避免干扰主流程的响应写入。
+
+- 正确用法：
+
+  ```go
+  go
+  
+  复制代码copiedContext := c.Copy()
+  go func() {
+      // 使用副本操作请求数据（只读）
+      param := copiedContext.Param("id")
+      // 但不能通过副本写入响应（copiedContext.Writer 是独立的）
+  }()
+  ```
+
+------
+
+###### 4. **响应写入的注意事项**
+
+- **即使使用 `c.Copy()`，副本的 `ResponseWriter` 也无法向客户端写入响应**，因为主流程可能已经完成响应并关闭连接。
+- 如果需要在 `goroutine` 中处理完成后修改响应，需通过其他方式（如通道）将结果传递回主流程，由主流程统一处理。
+
+------
+
+###### 总结
+
+- **必须使用 `c.Copy()`**：确保并发操作时请求数据的只读安全性。
+- **禁止在 `goroutine` 中使用原始上下文**：避免数据竞争和不可预知的崩溃。
+- **响应写入必须由主流程完成**：`goroutine` 仅适合处理与响应无关的后台任务（如日志、异步计算等）。
+
+这种设计是 Gin 在高性能和并发安全之间权衡的结果，遵循它能避免大多数并发相关的问题。
 
 
 

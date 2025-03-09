@@ -120,7 +120,11 @@ user,error := getUser()
 
 <img src="go_program_note.assets/image-20240715下午24217468.png" alt="image-20240715下午24217468" style="zoom:50%;" />
 
-##### 要比较两个变量 , 需要它俩都是相同的底层类型
+##### 要比较两个变量 , 需要它俩都是相同的底层类型, 
+
+命名类型 与 非命名类型比较 需要底层是相同的数据类型
+
+命名类型 与 命名类型比较 智能相同的命名类型之间比较, 即使是底层数据类型相同也会编译报错: 类型不匹配 
 
 
 
@@ -244,7 +248,7 @@ Java 的包（package）
 
 ##### 	局部声明一个变量 , 可以与全局存在的变量同名, 但会使局部优先使用局部自身的变量 ,而不会去使用全局变量;
 
-##### 	 如果要使用全局变量 , 在局部中不使用声明 , 直接赋值;
+##### 	 如果要使用全局变量 , 在局部中不使用短变量声明 , 直接赋值;
 
 
 
@@ -281,7 +285,9 @@ uint8  uint16  uint32  uint64
 
 
 
+int16 无法与 int32 进行运算和比较
 
+int32 无法与 int 进行运算和比较
 
 <img src="go_program_note.assets/image-20240717下午25446882.png" alt="image-20240717下午25446882" style="zoom:50%;" />
 
@@ -407,11 +413,13 @@ Go 语言（也称为 Golang）是由谷歌（Google）开发的，主要设计�
 
 <img src="go_program_note.assets/image-20240718下午60659564.png" alt="image-20240718下午60659564" style="zoom:50%;" />
 
-
+<img src="go_program_note.assets/image-20250218下午12956066.png" alt="image-20250218下午12956066" style="zoom:50%;" />
 
 <img src="go_program_note.assets/image-20240718下午62122577.png" alt="image-20240718下午62122577" style="zoom:50%;" />
 
 ##### 切片操作数, 左边包含, 右边不包含
+
+
 
 <img src="go_program_note.assets/image-20240719上午103002409.png" alt="image-20240719上午103002409" style="zoom:50%;" />
 
@@ -423,7 +431,7 @@ Go 语言（也称为 Golang）是由谷歌（Google）开发的，主要设计�
 
 #### append
 
-<img src="go_program_note.assets/image-20240719上午104442366.png" alt="image-20240719上午104442366" style="zoom:50%;" />
+<img src="go_program_note.assets/image-20240719上午104442366.png" alt="image-20240719上午104442366" style="zoom:76%;" />
 
 <img src="go_program_note.assets/image-20240719上午105831248.png" alt="image-20240719上午105831248" style="zoom:50%;" />
 
@@ -499,6 +507,23 @@ y[k]=0   1
 
 	fmt.Println(p1.X == p2.X && p1.Y == p2.Y)  //true
 	fmt.Println(p1 == p2)    //true
+```
+
+
+
+```go
+  p1 := Person{"1", 2}
+	p2 := Person{"1", 2}
+
+	fmt.Println(p1.Name == p2.Name && p1.Age == p2.Age) //true
+	fmt.Println(p1 == p2)                               //true
+
+	fmt.Printf("%v \n", p1)  // {1 2}
+	// %#v  按照 go 语法输出变量的值
+	fmt.Printf("%#v \n", p1) // main.Person{Name:"1", Age:2} 
+
+	fmt.Printf("%p  %p \n", &p1, &p2) // 0xc0000125b8  0xc0000125d0
+	fmt.Println(&p1 == &p2)           // false
 ```
 
 
@@ -589,6 +614,8 @@ y[k]=0   1
 
 func sum(vals ...int) int{
 }
+
+<img src="go_program_note.assets/image-20250226下午35916529.png" alt="image-20250226下午35916529" style="zoom:50%;" />
 
 #### 延迟函数调用
 
@@ -725,6 +752,12 @@ func (m MyInt) Double() int {
 ##### 属于某一接口的值 , 包含动态类型和动态值
 
 <img src="go_program_note.assets/image-20240725上午113250298.png" alt="image-20240725上午113250298" style="zoom:50%;" />
+
+
+
+
+
+
 
 ```go
 	var in io.Writer
@@ -881,7 +914,11 @@ default:
 
 <img src="go_program_note.assets/image-20240726下午94853511.png" alt="image-20240726下午94853511" style="zoom:50%;" />
 
+for ch_value := range  ch2 {
 
+} 
+
+**对通道进行 for range 循环, 循环会阻塞等待通道关闭**
 
 
 
@@ -913,9 +950,9 @@ default:
 
 2,多个 case 的情况, 唯一执行成功的,被命中; 如果有多个执行成功的,则随机命中其中一个 case;
 
-3, 可以设置 default : , 当没有执行成功的 case, 将可以执行默认操作或者灵活的退出
+**3, 可以设置 default : , 当没有执行成功的 case, 将可以执行默认操作或者灵活的退出**
 
-4,如果多路都阻塞 , 并且没有 default 的话, select 将阻塞等待
+**4,如果多路都阻塞 , 并且没有 default 的话, select 将阻塞等待**
 
 多路复用, 是同时使用多个通道, 避免单个通道阻塞整个流程的好方法
 
@@ -945,7 +982,7 @@ default:
 
 <img src="go_program_note.assets/image-20240730下午32323792.png" alt="image-20240730下午32323792" style="zoom:50%;" />
 
-
+<img src="go_program_note.assets/image-20250304上午114801241.png" alt="image-20250304上午114801241" style="zoom:50%;" />
 
 
 
@@ -954,8 +991,6 @@ default:
 
 
 #### 数据竞态
-
-
 
 
 
