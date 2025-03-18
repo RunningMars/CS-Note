@@ -387,6 +387,60 @@ Go语言中有丰富的数据类型，除了基本的整型、浮点型、布尔
 
 GO的数组是基本类型，不是引用类型；
 
+#### 字符串
+
+<img src="Go note.assets/image-20240717下午33254220.png" alt="image-20240717下午33254220" style="zoom:50%;" />
+
+<img src="Go note.assets/image-20240717下午33331851.png" alt="image-20240717下午33331851" style="zoom:50%;" />
+
+<img src="Go note.assets/image-20240717下午33210319.png" alt="image-20240717下午33210319" style="zoom:50%;" />
+
+
+
+
+
+##### 字符串字面量
+
+
+
+<img src="Go note.assets/image-20240717下午33539791.png" alt="image-20240717下午33539791" style="zoom:50%;" />
+
+##### 原生的字符串字面量
+
+<img src="Go note.assets/image-20240717下午33745245.png" alt="image-20240717下午33745245" style="zoom:50%;" />
+
+
+
+##### Unicode
+
+#### rune
+
+<img src="Go note.assets/image-20240717下午34007522.png" alt="image-20240717下午34007522" style="zoom:50%;" />
+
+<img src="Go note.assets/image-20240717下午35321743.png" alt="image-20240717下午35321743" style="zoom:50%;" />
+
+UTF-8 编码是谁发明的?GO 语言又是谁发明的?
+
+Chatgpt:
+
+UTF-8 编码由肯·汤普逊（Ken Thompson）和罗布·派克（Rob Pike）于 1992 年发明。UTF-8 是一种针对 Unicode 的可变长度字符编码，旨在向后兼容 ASCII 并有效地编码多字节字符。
+
+Go 语言（也称为 Golang）是由谷歌（Google）开发的，主要设计者是罗布·派克（Rob Pike）、肯·汤普逊（Ken Thompson）和罗伯特·格里斯莫（Robert Griesemer）。Go 语言的设计工作始于 2007 年，首次发布于 2009 年。
+
+
+
+<img src="Go note.assets/image-20240717下午40430493.png" alt="image-20240717下午40430493" style="zoom:50%;" />
+
+
+
+<img src="Go note.assets/image-20240717下午40439471.png" alt="image-20240717下午40439471" style="zoom:50%;" />
+
+<img src="Go note.assets/image-20240717下午91114147.png" alt="image-20240717下午91114147" style="zoom:50%;" />
+
+
+
+
+
 #### byte和rune类型
 
 组成每个字符串的元素叫做“字符”，可以通过遍历或者单个获取字符串元素获得字符。 字符用单引号（’）包裹起来，如：

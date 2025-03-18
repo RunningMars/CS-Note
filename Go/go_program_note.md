@@ -369,6 +369,8 @@ Go 语言（也称为 Golang）是由谷歌（Google）开发的，主要设计�
 
 <img src="go_program_note.assets/image-20240717下午91114147.png" alt="image-20240717下午91114147" style="zoom:50%;" />
 
+
+
 #### 常量
 
 <img src="go_program_note.assets/image-20240717下午91041382.png" alt="image-20240717下午91041382" style="zoom:50%;" />
@@ -1256,13 +1258,13 @@ go get 命令可以下载单一的包
 
 
 
+<img src="go_program_note.assets/image-20250313上午110107798.png" alt="image-20250313上午110107798" style="zoom:50%;" />
 
 
 
 
 
-
-
+unsafe.Pointer  不安全指针, 相当于抹去了指针的类型
 
 
 
