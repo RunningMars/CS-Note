@@ -17,25 +17,25 @@ GLOBAL （全局范围）
 
 SESSION （会话范围）
 
-![image-20230726180744230](MySql.assets/image-20230726180744230.png)
+![image-20230726180744230](MySql是怎样运行的.assets/image-20230726180744230.png)
 
 
 
 ## 字符集和比较规则
 
-![image-20230726180322556](MySql.assets/image-20230726180322556.png)
+![image-20230726180322556](MySql是怎样运行的.assets/image-20230726180322556.png)
 
 
 
-![image-20230726180429156](MySql.assets/image-20230726180429156.png)
+![image-20230726180429156](MySql是怎样运行的.assets/image-20230726180429156.png)
 
 
 
-![image-20230726180456392](MySql.assets/image-20230726180456392.png)
+![image-20230726180456392](MySql是怎样运行的.assets/image-20230726180456392.png)
 
 
 
-![image-20230726180509722](MySql.assets/image-20230726180509722.png)
+![image-20230726180509722](MySql是怎样运行的.assets/image-20230726180509722.png)
 
 <img src="MySql是怎样运行的.assets/image-20240326下午22339155.png" alt="image-20240326下午22339155" style="zoom:50%;" />
 
@@ -59,7 +59,7 @@ InnoDB 储存NULL值，其实只用到了一个bit的长度，再记录头中将
 
 <img src="MySql是怎样运行的.assets/image-20240326下午34836584.png" alt="image-20240326下午34836584" style="zoom:50%;" />
 
-![image-20230726174407215](MySql.assets/image-20230726174407215.png)
+![image-20230726174407215](MySql是怎样运行的.assets/image-20230726174407215.png)
 
 
 
@@ -73,13 +73,13 @@ InnoDB 储存NULL值，其实只用到了一个bit的长度，再记录头中将
 
 ### InnoDB 数据页结构
 
-![image-20230726180039203](MySql.assets/image-20230726180039203.png)
+![image-20230726180039203](MySql是怎样运行的.assets/image-20230726180039203.png)
 
 页内的记录，以链表的方式连接在一起。
 
 <img src="MySql是怎样运行的.assets/image-20240328下午45607613.png" alt="image-20240328下午45607613" style="zoom:50%;" />
 
-![image-20230726180150117](MySql.assets/image-20230726180150117.png)
+![image-20230726180150117](MySql是怎样运行的.assets/image-20230726180150117.png)
 
 
 
@@ -89,35 +89,35 @@ InnoDB 储存NULL值，其实只用到了一个bit的长度，再记录头中将
 
 ## B+树索引
 
-![image-20230721135805036](MySql.assets/image-20230721135805036.png)
+![image-20230721135805036](MySql是怎样运行的.assets/image-20230721135805036.png)
 
 
 
-![image-20230721143028013](MySql.assets/image-20230721143028013.png)
+![image-20230721143028013](MySql是怎样运行的.assets/image-20230721143028013.png)
 
 
 
 #### MyISAM 需要至少执行一次回表
 
-![image-20230721144705040](MySql.assets/image-20230721144705040.png)
+![image-20230721144705040](MySql是怎样运行的.assets/image-20230721144705040.png)
 
-![image-20230721144758451](MySql.assets/image-20230721144758451.png)
+![image-20230721144758451](MySql是怎样运行的.assets/image-20230721144758451.png)
 
 ## B+树索引的使用
 
 
 
-![image-20230721144954715](MySql.assets/image-20230721144954715.png)
+![image-20230721144954715](MySql是怎样运行的.assets/image-20230721144954715.png)
 
-![image-20230726142922904](MySql.assets/image-20230726142922904.png)
+![image-20230726142922904](MySql是怎样运行的.assets/image-20230726142922904.png)
 
-![image-20230726142620359](MySql.assets/image-20230726142654255.png)
+![image-20230726142620359](MySql是怎样运行的.assets/image-20230726142654255.png)
 
-![image-20230726142602123](MySql.assets/image-20230726142602123.png)
+![image-20230726142602123](MySql是怎样运行的.assets/image-20230726142602123.png)
 
 
 
-![image-20230726142523378](MySql.assets/image-20230726142523378.png)
+![image-20230726142523378](MySql是怎样运行的.assets/image-20230726142523378.png)
 
 
 
@@ -125,21 +125,21 @@ InnoDB 储存NULL值，其实只用到了一个bit的长度，再记录头中将
 
 #### 				回表的代价
 
-![image-20230726144058569](MySql.assets/image-20230726144058569.png)
+![image-20230726144058569](MySql是怎样运行的.assets/image-20230726144058569.png)
 
-![image-20230726144110221](MySql.assets/image-20230726144110221.png)
-
-
-
-![image-20230726144350202](MySql.assets/image-20230726144350202.png)
+![image-20230726144110221](MySql是怎样运行的.assets/image-20230726144110221.png)
 
 
 
-![image-20230726144741674](MySql.assets/image-20230726144741674.png)
+![image-20230726144350202](MySql是怎样运行的.assets/image-20230726144350202.png)
 
 
 
-![image-20230726145018802](MySql.assets/image-20230726145018802.png)
+![image-20230726144741674](MySql是怎样运行的.assets/image-20230726144741674.png)
+
+
+
+![image-20230726145018802](MySql是怎样运行的.assets/image-20230726145018802.png)
 
 尽可能选择 小的数据类型 更有利于查询效率，不单单只是节约存储空间那点好处。往往几个int型的大小相差4倍及以上，选小的类型，在二级索引扫描时可以较少倍数级的磁盘I/O次数
 
@@ -147,7 +147,7 @@ InnoDB 储存NULL值，其实只用到了一个bit的长度，再记录头中将
 
 
 
-![image-20230726152955023](MySql.assets/image-20230726152955023.png)
+![image-20230726152955023](MySql是怎样运行的.assets/image-20230726152955023.png)
 
 
 
@@ -155,23 +155,23 @@ InnoDB 储存NULL值，其实只用到了一个bit的长度，再记录头中将
 
 ## MySQL 的数据目录
 
-![image-20230726163127352](MySql.assets/image-20230726163127352.png)
+![image-20230726163127352](MySql是怎样运行的.assets/image-20230726163127352.png)
 
-![image-20230726163233246](MySql.assets/image-20230726163233246.png)
+![image-20230726163233246](MySql是怎样运行的.assets/image-20230726163233246.png)
 
 
 
 ## InnoDB 的表空间
 
-![image-20230726163700497](MySql.assets/image-20230726163700497.png)
+![image-20230726163700497](MySql是怎样运行的.assets/image-20230726163700497.png)
 
 
 
-![image-20230726164154595](MySql.assets/image-20230726164154595.png)
+![image-20230726164154595](MySql是怎样运行的.assets/image-20230726164154595.png)
 
 
 
-![image-20230726165204747](MySql.assets/image-20230726165204747.png)
+![image-20230726165204747](MySql是怎样运行的.assets/image-20230726165204747.png)
 
 
 
@@ -179,11 +179,11 @@ InnoDB 储存NULL值，其实只用到了一个bit的长度，再记录头中将
 
 
 
-![image-20230726181031393](MySql.assets/image-20230726181031393.png)
+![image-20230726181031393](MySql是怎样运行的.assets/image-20230726181031393.png)
 
-![image-20230726181325695](MySql.assets/image-20230726181325695.png)
+![image-20230726181325695](MySql是怎样运行的.assets/image-20230726181325695.png)
 
-![image-20230726181006435](MySql.assets/image-20230726181006435.png)
+![image-20230726181006435](MySql是怎样运行的.assets/image-20230726181006435.png)
 
 
 
@@ -193,15 +193,15 @@ InnoDB 储存NULL值，其实只用到了一个bit的长度，再记录头中将
 
 ### InnoDB 数据字典 , 元数据
 
-![image-20230731140959798](MySql.assets/image-20230731140959798.png)
+![image-20230731140959798](MySql是怎样运行的.assets/image-20230731140959798.png)
 
 
 
-![image-20230731141116343](MySql.assets/image-20230731141116343.png)
+![image-20230731141116343](MySql是怎样运行的.assets/image-20230731141116343.png)
 
 
 
-![image-20230731141522054](MySql.assets/image-20230731141522054.png)
+![image-20230731141522054](MySql是怎样运行的.assets/image-20230731141522054.png)
 
 
 
@@ -225,7 +225,7 @@ MySQLSe凹町 有一个称为优化器的模块. MySQL Server 在对一条查询
 
 ### const
 
-![image-20230731142233957](MySql.assets/image-20230731142233957.png)
+![image-20230731142233957](MySql是怎样运行的.assets/image-20230731142233957.png)
 
 
 
@@ -233,25 +233,25 @@ MySQLSe凹町 有一个称为优化器的模块. MySQL Server 在对一条查询
 
 ### ref
 
-![image-20230731142728313](MySql.assets/image-20230731142728313.png)
+![image-20230731142728313](MySql是怎样运行的.assets/image-20230731142728313.png)
 
 ### ref_or_null
 
-![image-20230731160313708](MySql.assets/image-20230731160313708.png)
+![image-20230731160313708](MySql是怎样运行的.assets/image-20230731160313708.png)
 
 值为 NUL 的记录会被 在索引 的最左边.
 
 ### range
 
-![image-20230731160507761](MySql.assets/image-20230731160507761.png)
+![image-20230731160507761](MySql是怎样运行的.assets/image-20230731160507761.png)
 
 ### index
 
-![image-20230731160643719](MySql.assets/image-20230731160643719.png)
+![image-20230731160643719](MySql是怎样运行的.assets/image-20230731160643719.png)
 
 ### all
 
-![image-20230731160830268](MySql.assets/image-20230731160830268.png)
+![image-20230731160830268](MySql是怎样运行的.assets/image-20230731160830268.png)
 
 
 
@@ -259,41 +259,41 @@ MySQLSe凹町 有一个称为优化器的模块. MySQL Server 在对一条查询
 
 
 
-![image-20230731161716943](MySql.assets/image-20230731161716943.png)
+![image-20230731161716943](MySql是怎样运行的.assets/image-20230731161716943.png)
 
-![image-20230731161704153](MySql.assets/image-20230731161704153.png)
-
-
-
-![image-20230731162355497](MySql.assets/image-20230731162355497.png)
+![image-20230731161704153](MySql是怎样运行的.assets/image-20230731161704153.png)
 
 
 
-![image-20230731162429740](MySql.assets/image-20230731162429740.png)
-
-![image-20230803105036300](MySql.assets/image-20230803105036300.png)
+![image-20230731162355497](MySql是怎样运行的.assets/image-20230731162355497.png)
 
 
 
+![image-20230731162429740](MySql是怎样运行的.assets/image-20230731162429740.png)
+
+![image-20230803105036300](MySql是怎样运行的.assets/image-20230803105036300.png)
 
 
-![image-20230803110109225](MySql.assets/image-20230803110109225.png)
+
+
+
+![image-20230803110109225](MySql是怎样运行的.assets/image-20230803110109225.png)
 
 
 
 ## 两个者的亲密接触 -- 连接的原理
 
-![image-20230803181015124](MySql.assets/image-20230803181015124.png)
+![image-20230803181015124](MySql是怎样运行的.assets/image-20230803181015124.png)
 
 
 
-![image-20230804142922338](MySql.assets/image-20230804142922338.png)
+![image-20230804142922338](MySql是怎样运行的.assets/image-20230804142922338.png)
 
 
 
-![image-20230804162932120](MySql.assets/image-20230804162932120.png)
+![image-20230804162932120](MySql是怎样运行的.assets/image-20230804162932120.png)
 
-![image-20230804162942316](MySql.assets/image-20230804162942316.png)
+![image-20230804162942316](MySql是怎样运行的.assets/image-20230804162942316.png)
 
 
 
@@ -319,35 +319,35 @@ MySQLSe凹町 有一个称为优化器的模块. MySQL Server 在对一条查询
 
 ## 基于成本的优化
 
-![image-20230808162839829](MySql.assets/image-20230808162839829.png)
+![image-20230808162839829](MySql是怎样运行的.assets/image-20230808162839829.png)
 
-![image-20230809110101832](MySql.assets/image-20230809110101832.png)
-
-
-
-![image-20230810164520350](MySql.assets/image-20230810164520350.png)
+![image-20230809110101832](MySql是怎样运行的.assets/image-20230809110101832.png)
 
 
 
-![image-20230810164827621](MySql.assets/image-20230810164827621.png)
+![image-20230810164520350](MySql是怎样运行的.assets/image-20230810164520350.png)
 
 
 
-![image-20230810164940070](MySql.assets/image-20230810164940070.png)
+![image-20230810164827621](MySql是怎样运行的.assets/image-20230810164827621.png)
 
 
 
-![image-20230810172008635](MySql.assets/image-20230810172008635.png)
+![image-20230810164940070](MySql是怎样运行的.assets/image-20230810164940070.png)
 
 
 
-![image-20230816093532235](MySql.assets/image-20230816093532235.png)
+![image-20230810172008635](MySql是怎样运行的.assets/image-20230810172008635.png)
 
 
 
-![image-20230816105640896](MySql.assets/image-20230816105640896.png)
+![image-20230816093532235](MySql是怎样运行的.assets/image-20230816093532235.png)
 
-![image-20230816163927861](MySql.assets/image-20230816163927861.png)
+
+
+![image-20230816105640896](MySql是怎样运行的.assets/image-20230816105640896.png)
+
+![image-20230816163927861](MySql是怎样运行的.assets/image-20230816163927861.png)
 
 
 
@@ -369,11 +369,11 @@ MySQLSe凹町 有一个称为优化器的模块. MySQL Server 在对一条查询
 
 
 
-![image-20230816172311495](MySql.assets/image-20230816172311495.png)
+![image-20230816172311495](MySql是怎样运行的.assets/image-20230816172311495.png)
 
 
 
-![image-20230818111723139](MySql.assets/image-20230818111723139.png)
+![image-20230818111723139](MySql是怎样运行的.assets/image-20230818111723139.png)
 
 
 
@@ -385,35 +385,35 @@ MySQLSe凹町 有一个称为优化器的模块. MySQL Server 在对一条查询
 
 ### 外连接消除
 
-![image-20230818135305453](MySql.assets/image-20230818135305453.png)
+![image-20230818135305453](MySql是怎样运行的.assets/image-20230818135305453.png)
 
 ### 子查询优化
 
-![image-20230818140513907](MySql.assets/image-20230818140513907.png)
+![image-20230818140513907](MySql是怎样运行的.assets/image-20230818140513907.png)
 
 
 
-![image-20230818142231971](MySql.assets/image-20230818142231971.png)
+![image-20230818142231971](MySql是怎样运行的.assets/image-20230818142231971.png)
 
 
 
 
 
-![image-20230818142952158](MySql.assets/image-20230818142952158.png)
+![image-20230818142952158](MySql是怎样运行的.assets/image-20230818142952158.png)
 
 
 
-![image-20230818143329763](MySql.assets/image-20230818143329763.png)
+![image-20230818143329763](MySql是怎样运行的.assets/image-20230818143329763.png)
 
 ### In 子查询优化
 
-![image-20230818143540468](MySql.assets/image-20230818143540468.png)
+![image-20230818143540468](MySql是怎样运行的.assets/image-20230818143540468.png)
 
-![image-20230818150402905](MySql.assets/image-20230818150402905.png)
+![image-20230818150402905](MySql是怎样运行的.assets/image-20230818150402905.png)
 
 
 
-![image-20230818150417718](MySql.assets/image-20230818150417718.png)
+![image-20230818150417718](MySql是怎样运行的.assets/image-20230818150417718.png)
 
 
 
@@ -429,97 +429,97 @@ MySQLSe凹町 有一个称为优化器的模块. MySQL Server 在对一条查询
 
 
 
-![image-20230818171916198](MySql.assets/image-20230818171916198.png)
+![image-20230818171916198](MySql是怎样运行的.assets/image-20230818171916198.png)
 
 
 
-![image-20230818172212181](MySql.assets/image-20230818172212181.png)
+![image-20230818172212181](MySql是怎样运行的.assets/image-20230818172212181.png)
 
 
 
 ### select type
 
-![image-20230818180312026](MySql.assets/image-20230818180312026.png)
+![image-20230818180312026](MySql是怎样运行的.assets/image-20230818180312026.png)
 
-![image-20230821112418365](MySql.assets/image-20230821112418365.png)
+![image-20230821112418365](MySql是怎样运行的.assets/image-20230821112418365.png)
 
 
 
 ### type 访问方法
 
-![image-20230821132100254](MySql.assets/image-20230821132100254.png)
+![image-20230821132100254](MySql是怎样运行的.assets/image-20230821132100254.png)
 
 #### system
 
-![image-20230821132453515](MySql.assets/image-20230821132453515.png)
+![image-20230821132453515](MySql是怎样运行的.assets/image-20230821132453515.png)
 
 #### const 
 
-![image-20230821132818377](MySql.assets/image-20230821132818377.png)
+![image-20230821132818377](MySql是怎样运行的.assets/image-20230821132818377.png)
 
 #### eq_ref 
 
-![image-20230821140143166](MySql.assets/image-20230821140143166.png)
+![image-20230821140143166](MySql是怎样运行的.assets/image-20230821140143166.png)
 
 #### ref
 
-![image-20230821143114130](MySql.assets/image-20230821143114130.png)
+![image-20230821143114130](MySql是怎样运行的.assets/image-20230821143114130.png)
 
 #### fulltext 
 
-![image-20230821143124983](MySql.assets/image-20230821143124983.png)
+![image-20230821143124983](MySql是怎样运行的.assets/image-20230821143124983.png)
 
 #### ref_or_null
 
-![image-20230821151408322](MySql.assets/image-20230821151408322.png)
+![image-20230821151408322](MySql是怎样运行的.assets/image-20230821151408322.png)
 
 #### index_merge
 
-![image-20230821153646944](MySql.assets/image-20230821153646944.png)
+![image-20230821153646944](MySql是怎样运行的.assets/image-20230821153646944.png)
 
 #### unique_subquery
 
-![image-20230821155600905](MySql.assets/image-20230821155600905.png)
+![image-20230821155600905](MySql是怎样运行的.assets/image-20230821155600905.png)
 
 #### index_subquery 
 
-![image-20230821160534387](MySql.assets/image-20230821160534387.png)
+![image-20230821160534387](MySql是怎样运行的.assets/image-20230821160534387.png)
 
 #### range 
 
-![image-20230821160731687](MySql.assets/image-20230821160731687.png)
+![image-20230821160731687](MySql是怎样运行的.assets/image-20230821160731687.png)
 
 #### index 
 
-![image-20230821160912156](MySql.assets/image-20230821160912156.png)
+![image-20230821160912156](MySql是怎样运行的.assets/image-20230821160912156.png)
 
-![image-20230821161125553](MySql.assets/image-20230821161125553.png)
+![image-20230821161125553](MySql是怎样运行的.assets/image-20230821161125553.png)
 
 #### ALL
 
-![image-20230821161226060](MySql.assets/image-20230821161226060.png)
+![image-20230821161226060](MySql是怎样运行的.assets/image-20230821161226060.png)
 
 
 
 
 
-![image-20230821161420028](MySql.assets/image-20230821161420028.png)
+![image-20230821161420028](MySql是怎样运行的.assets/image-20230821161420028.png)
 
-![image-20230821164205296](MySql.assets/image-20230821164205296.png)
+![image-20230821164205296](MySql是怎样运行的.assets/image-20230821164205296.png)
 
-![image-20230821164229821](MySql.assets/image-20230821164229821.png)
+![image-20230821164229821](MySql是怎样运行的.assets/image-20230821164229821.png)
 
-![image-20230821164310838](MySql.assets/image-20230821164310838.png)
-
-
-
-![image-20230821165650747](MySql.assets/image-20230821165650747.png)
-
-![image-20230821165807997](MySql.assets/image-20230821165807997.png)
+![image-20230821164310838](MySql是怎样运行的.assets/image-20230821164310838.png)
 
 
 
-![image-20230821171503104](MySql.assets/image-20230821171503104.png)
+![image-20230821165650747](MySql是怎样运行的.assets/image-20230821165650747.png)
+
+![image-20230821165807997](MySql是怎样运行的.assets/image-20230821165807997.png)
+
+
+
+![image-20230821171503104](MySql是怎样运行的.assets/image-20230821171503104.png)
 
 
 
@@ -529,25 +529,25 @@ Extra
 
 
 
-![image-20230821171702614](MySql.assets/image-20230821171702614.png)
+![image-20230821171702614](MySql是怎样运行的.assets/image-20230821171702614.png)
 
 
 
-![image-20230821172739506](MySql.assets/image-20230821172739506.png)
+![image-20230821172739506](MySql是怎样运行的.assets/image-20230821172739506.png)
 
-![image-20230821172940831](MySql.assets/image-20230821172940831.png)
+![image-20230821172940831](MySql是怎样运行的.assets/image-20230821172940831.png)
 
-![image-20230821173124800](MySql.assets/image-20230821173124800.png)
+![image-20230821173124800](MySql是怎样运行的.assets/image-20230821173124800.png)
 
 
 
-![image-20230821173250099](MySql.assets/image-20230821173250099.png)
+![image-20230821173250099](MySql是怎样运行的.assets/image-20230821173250099.png)
 
-![image-20230821173444264](MySql.assets/image-20230821173444264.png)
+![image-20230821173444264](MySql是怎样运行的.assets/image-20230821173444264.png)
 
-![image-20230821175957209](MySql.assets/image-20230821175957209.png)
+![image-20230821175957209](MySql是怎样运行的.assets/image-20230821175957209.png)
 
-![image-20230821180210125](MySql.assets/image-20230821180210125.png)
+![image-20230821180210125](MySql是怎样运行的.assets/image-20230821180210125.png)
 
 
 
@@ -841,7 +841,7 @@ SET OPTIMIZER_TRACE="enabled=off";
 }
 ```
 
-![image-20230823105626622](MySql.assets/image-20230823105626622.png)
+![image-20230823105626622](MySql是怎样运行的.assets/image-20230823105626622.png)
 
 
 
@@ -855,37 +855,37 @@ SET OPTIMIZER_TRACE="enabled=off";
 
 
 
-![image-20230823154541704](MySql.assets/image-20230823154541704.png)
+![image-20230823154541704](MySql是怎样运行的.assets/image-20230823154541704.png)
 
-![image-20230823154721798](MySql.assets/image-20230823154721798.png)
+![image-20230823154721798](MySql是怎样运行的.assets/image-20230823154721798.png)
 
 
 
 ### free链表
 
-![image-20230824165417430](MySql.assets/image-20230824165417430.png)
+![image-20230824165417430](MySql是怎样运行的.assets/image-20230824165417430.png)
 
-![image-20230824165427951](MySql.assets/image-20230824165427951.png)
+![image-20230824165427951](MySql是怎样运行的.assets/image-20230824165427951.png)
 
 
 
-![image-20230824170123464](MySql.assets/image-20230824170123464.png)
+![image-20230824170123464](MySql是怎样运行的.assets/image-20230824170123464.png)
 
-![image-20230824170657286](MySql.assets/image-20230824170657286.png)
+![image-20230824170657286](MySql是怎样运行的.assets/image-20230824170657286.png)
 
 ### LRU链表
 
-![image-20230825131925306](MySql.assets/image-20230825131925306.png)
+![image-20230825131925306](MySql是怎样运行的.assets/image-20230825131925306.png)
 
 
 
-![image-20230825141256502](MySql.assets/image-20230825141256502.png)
+![image-20230825141256502](MySql是怎样运行的.assets/image-20230825141256502.png)
 
 
 
-![image-20230829171836679](MySql.assets/image-20230829171836679.png)
+![image-20230829171836679](MySql是怎样运行的.assets/image-20230829171836679.png)
 
-![image-20230829172119425](MySql.assets/image-20230829172119425.png)
+![image-20230829172119425](MySql是怎样运行的.assets/image-20230829172119425.png)
 
 
 
@@ -899,15 +899,15 @@ SET OPTIMIZER_TRACE="enabled=off";
 
 
 
-![image-20230829174028788](MySql.assets/image-20230829174028788.png)
+![image-20230829174028788](MySql是怎样运行的.assets/image-20230829174028788.png)
 
-![image-20230829174519966](MySql.assets/image-20230829174519966.png)
-
-
+![image-20230829174519966](MySql是怎样运行的.assets/image-20230829174519966.png)
 
 
 
-![image-20230829174836016](MySql.assets/image-20230829174836016.png)
+
+
+![image-20230829174836016](MySql是怎样运行的.assets/image-20230829174836016.png)
 
 
 
@@ -921,35 +921,35 @@ SET OPTIMIZER_TRACE="enabled=off";
 
 ## 说过的话就一定要做到 -- redo 日志
 
-![image-20230829181732202](MySql.assets/image-20230829181732202.png)
+![image-20230829181732202](MySql是怎样运行的.assets/image-20230829181732202.png)
 
 
 
-![image-20230830140507708](MySql.assets/image-20230830140507708.png)
+![image-20230830140507708](MySql是怎样运行的.assets/image-20230830140507708.png)
 
-![image-20230830164938258](MySql.assets/image-20230830164938258.png)
-
-
-
-![image-20230830173046511](MySql.assets/image-20230830173046511.png)
+![image-20230830164938258](MySql是怎样运行的.assets/image-20230830164938258.png)
 
 
 
-
-
-![image-20230830181058027](MySql.assets/image-20230830181058027.png)
-
-
-
-![image-20230831095927579](MySql.assets/image-20230831095927579.png)
+![image-20230830173046511](MySql是怎样运行的.assets/image-20230830173046511.png)
 
 
 
-![image-20230831103606777](MySql.assets/image-20230831103606777.png)
+
+
+![image-20230830181058027](MySql是怎样运行的.assets/image-20230830181058027.png)
+
+
+
+![image-20230831095927579](MySql是怎样运行的.assets/image-20230831095927579.png)
+
+
+
+![image-20230831103606777](MySql是怎样运行的.assets/image-20230831103606777.png)
 
 ### innodb_flush_log_at_trx_commit
 
-![image-20230831105025347](MySql.assets/image-20230831105025347.png)
+![image-20230831105025347](MySql是怎样运行的.assets/image-20230831105025347.png)
 
 -- 0 commit 时,redo日志不刷新到磁盘
 -- 1 commit 时,redo日志刷新到磁盘
@@ -957,9 +957,9 @@ SET OPTIMIZER_TRACE="enabled=off";
 
 show VARIABLES like 'innodb_flush_log_at_trx_commit';
 
-![image-20230831143410977](MySql.assets/image-20230831143410977.png)
+![image-20230831143410977](MySql是怎样运行的.assets/image-20230831143410977.png)
 
-![image-20230831143424287](MySql.assets/image-20230831143424287.png)
+![image-20230831143424287](MySql是怎样运行的.assets/image-20230831143424287.png)
 
 
 
@@ -979,23 +979,23 @@ show VARIABLES like 'innodb_flush_log_at_trx_commit';
 
 
 
-![image-20230831143935587](MySql.assets/image-20230831143935587.png)
+![image-20230831143935587](MySql是怎样运行的.assets/image-20230831143935587.png)
 
 
 
 
 
-![image-20230831145024819](MySql.assets/image-20230831145024819.png)
+![image-20230831145024819](MySql是怎样运行的.assets/image-20230831145024819.png)
 
 ### insert 类型的undo日志
 
-![image-20230831161841673](MySql.assets/image-20230831161841673.png)
+![image-20230831161841673](MySql是怎样运行的.assets/image-20230831161841673.png)
 
 ### delete 类型的undo日志
 
-![image-20230831161753075](MySql.assets/image-20230831161753075.png)
+![image-20230831161753075](MySql是怎样运行的.assets/image-20230831161753075.png)
 
-![image-20230831161940175](MySql.assets/image-20230831161940175.png)
+![image-20230831161940175](MySql是怎样运行的.assets/image-20230831161940175.png)
 
 
 
@@ -1003,33 +1003,33 @@ show VARIABLES like 'innodb_flush_log_at_trx_commit';
 
 ### UPDATE ，不改主键
 
-![image-20230831164939370](MySql.assets/image-20230831164939370.png)
+![image-20230831164939370](MySql是怎样运行的.assets/image-20230831164939370.png)
 
-![image-20230831165028537](MySql.assets/image-20230831165028537.png)
+![image-20230831165028537](MySql是怎样运行的.assets/image-20230831165028537.png)
 
 ### UPDATE ，改主键
 
-![image-20230831164921594](MySql.assets/image-20230831164921594.png)
+![image-20230831164921594](MySql是怎样运行的.assets/image-20230831164921594.png)
 
 
 
-![image-20230831165047071](MySql.assets/image-20230831165047071.png)
+![image-20230831165047071](MySql是怎样运行的.assets/image-20230831165047071.png)
 
 ### 对二级索引的影响
 
-![image-20230831165150653](MySql.assets/image-20230831165150653.png)
+![image-20230831165150653](MySql是怎样运行的.assets/image-20230831165150653.png)
 
 ### 通用链表结构
 
-![image-20230831165521003](MySql.assets/image-20230831165521003.png)
+![image-20230831165521003](MySql是怎样运行的.assets/image-20230831165521003.png)
 
-![image-20230831165801323](MySql.assets/image-20230831165801323.png)
-
-
+![image-20230831165801323](MySql是怎样运行的.assets/image-20230831165801323.png)
 
 
 
-![image-20230831170017250](MySql.assets/image-20230831170017250.png)
+
+
+![image-20230831170017250](MySql是怎样运行的.assets/image-20230831170017250.png)
 
 
 
@@ -1039,29 +1039,29 @@ show VARIABLES like 'innodb_flush_log_at_trx_commit';
 
 
 
-![image-20230831170127782](MySql.assets/image-20230831170127782.png)
+![image-20230831170127782](MySql是怎样运行的.assets/image-20230831170127782.png)
 
 
 
-![image-20230831170607061](MySql.assets/image-20230831170607061.png)
+![image-20230831170607061](MySql是怎样运行的.assets/image-20230831170607061.png)
 
 
 
 
 
-![image-20230831170821471](MySql.assets/image-20230831170821471.png)
+![image-20230831170821471](MySql是怎样运行的.assets/image-20230831170821471.png)
 
 ### 段的概念
 
 
 
-![image-20230831170919907](MySql.assets/image-20230831170919907.png)
+![image-20230831170919907](MySql是怎样运行的.assets/image-20230831170919907.png)
 
 
 
-![image-20230831171701839](MySql.assets/image-20230831171701839.png)
+![image-20230831171701839](MySql是怎样运行的.assets/image-20230831171701839.png)
 
-![image-20230831171720140](MySql.assets/image-20230831171720140.png)
+![image-20230831171720140](MySql是怎样运行的.assets/image-20230831171720140.png)
 
 ### 回滚段
 
@@ -1071,71 +1071,71 @@ show VARIABLES like 'innodb_flush_log_at_trx_commit';
 
 
 
-![image-20230831180906804](MySql.assets/image-20230831180906804.png)
+![image-20230831180906804](MySql是怎样运行的.assets/image-20230831180906804.png)
 
-![image-20230831180933995](MySql.assets/image-20230831180933995.png)
+![image-20230831180933995](MySql是怎样运行的.assets/image-20230831180933995.png)
 
-![image-20230831181035500](MySql.assets/image-20230831181035500.png)
+![image-20230831181035500](MySql是怎样运行的.assets/image-20230831181035500.png)
 
 
 
 ### 脏写
 
-![image-20230831181847256](MySql.assets/image-20230831181847256.png)
+![image-20230831181847256](MySql是怎样运行的.assets/image-20230831181847256.png)
 
 ### 脏读
 
-![image-20230901111249314](MySql.assets/image-20230901111249314.png)
+![image-20230901111249314](MySql是怎样运行的.assets/image-20230901111249314.png)
 
 ### 不可重复读
 
-![image-20230901111855147](MySql.assets/image-20230901111855147.png)
+![image-20230901111855147](MySql是怎样运行的.assets/image-20230901111855147.png)
 
 ### 幻读
 
-![image-20230901112319292](MySql.assets/image-20230901112319292.png)
+![image-20230901112319292](MySql是怎样运行的.assets/image-20230901112319292.png)
 
 
 
 SQL标准中的四中隔离级别
 
-![image-20230901112447798](MySql.assets/image-20230901112447798.png)
+![image-20230901112447798](MySql是怎样运行的.assets/image-20230901112447798.png)
 
-![image-20230901113527046](MySql.assets/image-20230901113527046.png)
+![image-20230901113527046](MySql是怎样运行的.assets/image-20230901113527046.png)
 
 
 
-![image-20230901113539768](MySql.assets/image-20230901113539768.png)
+![image-20230901113539768](MySql是怎样运行的.assets/image-20230901113539768.png)
 
-![image-20230901113832314](MySql.assets/image-20230901113832314.png)
+![image-20230901113832314](MySql是怎样运行的.assets/image-20230901113832314.png)
 
-![image-20230901161327414](MySql.assets/image-20230901161327414.png)
+![image-20230901161327414](MySql是怎样运行的.assets/image-20230901161327414.png)
 
 ### MVCC原理 -- 版本链
 
-![image-20230903112530688](MySql.assets/image-20230903112530688.png)
+![image-20230903112530688](MySql是怎样运行的.assets/image-20230903112530688.png)
 
 
 
-![image-20230903112700278](MySql.assets/image-20230903112700278.png)
+![image-20230903112700278](MySql是怎样运行的.assets/image-20230903112700278.png)
 
-![image-20230903112740409](MySql.assets/image-20230903112740409.png)
+![image-20230903112740409](MySql是怎样运行的.assets/image-20230903112740409.png)
 
-![image-20230903112812816](MySql.assets/image-20230903112812816.png)
+![image-20230903112812816](MySql是怎样运行的.assets/image-20230903112812816.png)
 
-![image-20230903112835420](MySql.assets/image-20230903112835420.png)
+![image-20230903112835420](MySql是怎样运行的.assets/image-20230903112835420.png)
 
-![image-20230903112849494](MySql.assets/image-20230903112849494.png)
+![image-20230903112849494](MySql是怎样运行的.assets/image-20230903112849494.png)
 
-![image-20230903112902545](MySql.assets/image-20230903112902545.png)
-
-
-
-![image-20230903112916000](MySql.assets/image-20230903112916000.png)
+![image-20230903112902545](MySql是怎样运行的.assets/image-20230903112902545.png)
 
 
 
-![image-20230903112159588](MySql.assets/image-20230903112159588.png)
+![image-20230903112916000](MySql是怎样运行的.assets/image-20230903112916000.png)
+
+
+
+![image-20230903112159588](MySql是怎样运行的.assets/image-20230903112159588.png)
 
 ### REPEATABLE READ 总结：
 
@@ -1143,19 +1143,19 @@ SQL标准中的四中隔离级别
 
 
 
-![image-20230903112943088](MySql.assets/image-20230903112943088.png)
+![image-20230903112943088](MySql是怎样运行的.assets/image-20230903112943088.png)
 
 
 
 
 
-![image-20230903114654326](MySql.assets/image-20230903114654326.png)
+![image-20230903114654326](MySql是怎样运行的.assets/image-20230903114654326.png)
 
 
 
 
 
-![image-20230903114750072](MySql.assets/image-20230903114750072.png)
+![image-20230903114750072](MySql是怎样运行的.assets/image-20230903114750072.png)
 
 
 
@@ -1167,47 +1167,47 @@ SQL标准中的四中隔离级别
 
 
 
-![image-20230903152914579](MySql.assets/image-20230903152914579.png)
+![image-20230903152914579](MySql是怎样运行的.assets/image-20230903152914579.png)
 
-![image-20230904110444376](MySql.assets/image-20230904110444376.png)
+![image-20230904110444376](MySql是怎样运行的.assets/image-20230904110444376.png)
 
-![image-20230904110501023](MySql.assets/image-20230904110501023.png)
+![image-20230904110501023](MySql是怎样运行的.assets/image-20230904110501023.png)
 
-![image-20230904110617227](MySql.assets/image-20230904110617227.png)
-
-
-
-![image-20230904110633610](MySql.assets/image-20230904110633610.png)
-
-![image-20230904110656480](MySql.assets/image-20230904110656480.png)
-
-![image-20230904110711019](MySql.assets/image-20230904110711019.png)
-
-![image-20230904110730748](MySql.assets/image-20230904110730748.png)
-
-![image-20230904110814540](MySql.assets/image-20230904110814540.png)
+![image-20230904110617227](MySql是怎样运行的.assets/image-20230904110617227.png)
 
 
 
-![image-20230904110851258](MySql.assets/image-20230904110851258.png)
+![image-20230904110633610](MySql是怎样运行的.assets/image-20230904110633610.png)
+
+![image-20230904110656480](MySql是怎样运行的.assets/image-20230904110656480.png)
+
+![image-20230904110711019](MySql是怎样运行的.assets/image-20230904110711019.png)
+
+![image-20230904110730748](MySql是怎样运行的.assets/image-20230904110730748.png)
+
+![image-20230904110814540](MySql是怎样运行的.assets/image-20230904110814540.png)
+
+
+
+![image-20230904110851258](MySql是怎样运行的.assets/image-20230904110851258.png)
 
 ### INNODB 的表级锁
 
-![image-20230904110922881](MySql.assets/image-20230904110922881.png)
+![image-20230904110922881](MySql是怎样运行的.assets/image-20230904110922881.png)
 
-![image-20230904110951410](MySql.assets/image-20230904110951410.png)
+![image-20230904110951410](MySql是怎样运行的.assets/image-20230904110951410.png)
 
-![image-20230904111019276](MySql.assets/image-20230904111019276.png)
+![image-20230904111019276](MySql是怎样运行的.assets/image-20230904111019276.png)
 
 
 
 ### INNODB 的行级锁
 
-![image-20230904111109075](MySql.assets/image-20230904111109075.png)
+![image-20230904111109075](MySql是怎样运行的.assets/image-20230904111109075.png)
 
-![image-20230904111245118](MySql.assets/image-20230904111245118.png)
+![image-20230904111245118](MySql是怎样运行的.assets/image-20230904111245118.png)
 
-![image-20230904111259261](MySql.assets/image-20230904111259261.png)
+![image-20230904111259261](MySql是怎样运行的.assets/image-20230904111259261.png)
 
 
 
@@ -1215,7 +1215,7 @@ SQL标准中的四中隔离级别
 
 ### 信号量的实现
 
-![image-20230903122302904](MySql.assets/image-20230903122302904.png)
+![image-20230903122302904](MySql是怎样运行的.assets/image-20230903122302904.png)
 
 
 
@@ -1227,9 +1227,9 @@ SQL标准中的四中隔离级别
 
 
 
-![image-20230904111452059](MySql.assets/image-20230904111452059.png)
+![image-20230904111452059](MySql是怎样运行的.assets/image-20230904111452059.png)
 
-![image-20230904111701720](MySql.assets/image-20230904111701720.png)
+![image-20230904111701720](MySql是怎样运行的.assets/image-20230904111701720.png)
 
 
 
@@ -1237,15 +1237,13 @@ SQL标准中的四中隔离级别
 
 ### 死锁
 
-![image-20230906172333265](MySql.assets/image-20230906172333265.png)
+![image-20230906172333265](MySql是怎样运行的.assets/image-20230906172333265.png)
 
-![image-20230906173342916](MySql.assets/image-20230906173342916.png)
-
-
-
-![image-20230906173326441](MySql.assets/image-20230906173326441.png)
+![image-20230906173342916](MySql是怎样运行的.assets/image-20230906173342916.png)
 
 
+
+![image-20230906173326441](MySql是怎样运行的.assets/image-20230906173326441.png)
 
 
 
@@ -1291,7 +1289,9 @@ SQL标准中的四中隔离级别
 
 
 
-![image-20230906173236040](MySql.assets/image-20230906173236040.png)
+
+
+![image-20230906173236040](MySql是怎样运行的.assets/image-20230906173236040.png)
 
 
 

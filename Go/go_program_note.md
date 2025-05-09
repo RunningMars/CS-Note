@@ -64,6 +64,11 @@ go 语言中,map 是一个使用 make 创建的数据结构的引用
 %v 值
 %T 类型
 
+%#v  按照 go 语法输出变量的值
+
+	// %#v  按照 go 语法输出变量的值
+	fmt.Printf("%#v \n", p1) // main.Person{Name:"1", Age:2} 
+
 ## 第二章 程序结构
 
 
@@ -260,7 +265,7 @@ Java 的包（package）
 
 <img src="go_program_note.assets/image-20240717下午22100282.png" alt="image-20240717下午22100282" style="zoom:50%;" />
 
-##### 基础类型, 聚合类型 ,  引用类型 , 接口类型
+##### 基础类型,  聚合类型 ,  引用类型 ,  接口类型
 
 #### 整数
 
